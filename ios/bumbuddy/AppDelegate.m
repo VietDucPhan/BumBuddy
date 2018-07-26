@@ -9,6 +9,7 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <RNGoogleSignin/RNGoogleSignin.h>
 #import <React/RCTRootView.h>
 
 @implementation AppDelegate
@@ -43,7 +44,11 @@
                                                                 openURL:url
                                                       sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
                                                              annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
-                  ];
+                  ] || [RNGoogleSignin application:application
+                                           openURL:url
+                                 sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                        annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
+                        ];
   // Add any custom logic here.
   return handled;
 }

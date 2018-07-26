@@ -28,6 +28,26 @@
 				<string>fb1723184451313762</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.googleusercontent.apps.315634877630-i8e62m4r1qifg1qmm8b9b0m0gu39la85</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.315634877630-i8e62m4r1qifg1qmm8b9b0m0gu39la85</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.bumbuddy</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.bumbuddy</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>

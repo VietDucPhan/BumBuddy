@@ -33,8 +33,7 @@ export default class App extends Component<Props> {
     GoogleSignin.hasPlayServices({ autoResolve: true }).then(() => {
         console.log("hasPlayServices");
         GoogleSignin.configure({
-          iosClientId: '315634877630-isklnqj79dtsf1oaoml9big6eq90jrtv.apps.googleusercontent.com',
-          webClientId: '315634877630-gfoq4ovb7to7jh67j216017urb0eu7gj.apps.googleusercontent.com',
+          iosClientId: '315634877630-i8e62m4r1qifg1qmm8b9b0m0gu39la85.apps.googleusercontent.com',
           offlineAccess: false
         }).then(() => {
           // you can now call currentUserAsync()
