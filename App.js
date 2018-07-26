@@ -17,6 +17,7 @@ const {
   LoginButton,
   AccessToken
 } = FBSDK;
+import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -29,6 +30,25 @@ const instructions = Platform.select({
 type Props = {};
 export default class App extends Component<Props> {
   render() {
+    GoogleSignin.hasPlayServices({ autoResolve: true }).then(() => {
+        console.log("hasPlayServices");
+        GoogleSignin.configure({
+          iosClientId: '315634877630-isklnqj79dtsf1oaoml9big6eq90jrtv.apps.googleusercontent.com',
+          webClientId: '315634877630-gfoq4ovb7to7jh67j216017urb0eu7gj.apps.googleusercontent.com',
+          offlineAccess: false
+        }).then(() => {
+          // you can now call currentUserAsync()
+          console.log("hasPlayServices.then");
+        });
+        //
+        GoogleSignin.currentUserAsync().then((user) => {
+          console.log('USER', user);
+        }).done();
+
+      })
+      .catch((err) => {
+        console.log("Play services error", err.code, err.message);
+      });
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
@@ -58,6 +78,11 @@ export default class App extends Component<Props> {
             }
           }
           onLogoutFinished={() => alert("logout.")}/>
+          <GoogleSigninButton
+    style={{ width: 48, height: 48 }}
+    size={GoogleSigninButton.Size.Icon}
+    color={GoogleSigninButton.Color.Dark}
+    onPress={this._signIn}/>
       </View>
     );
   }
