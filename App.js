@@ -18,7 +18,7 @@ const {
   AccessToken
 } = FBSDK;
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
-
+import MapView from 'react-native-maps';
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
     'Cmd+D or shake for dev menu',
@@ -50,6 +50,16 @@ export default class App extends Component<Props> {
       });
     return (
       <View style={styles.container}>
+        <MapView
+           style={styles.map}
+           region={{
+             latitude: 37.78825,
+             longitude: -122.4324,
+             latitudeDelta: 0.015,
+             longitudeDelta: 0.0121,
+           }}
+         >
+         </MapView>
         <Text style={styles.welcome}>
           Welcome to React Native!
         </Text>
@@ -89,11 +99,15 @@ export default class App extends Component<Props> {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
+   ...StyleSheet.absoluteFillObject,
+   height: 400,
+   width: 400,
+   justifyContent: 'flex-end',
+   alignItems: 'center',
+ },
+ map: {
+   ...StyleSheet.absoluteFillObject,
+ },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
