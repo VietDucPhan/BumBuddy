@@ -19,6 +19,7 @@ const {
 } = FBSDK;
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 import MapView from 'react-native-maps';
+import Icon from 'react-native-vector-icons/Ionicons';
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
     'Cmd+D or shake for dev menu',
@@ -92,6 +93,7 @@ export default class App extends Component<Props> {
     size={GoogleSigninButton.Size.Icon}
     color={GoogleSigninButton.Color.Dark}
     onPress={this._signIn}/>
+    <Icon style={{paddingTop:5, paddingBottom:5}} size={30} name={'ios-person-outline'} />
       </View>
     );
   }
