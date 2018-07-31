@@ -148,6 +148,7 @@ dependencies {
         exclude group: 'com.google.android.gms', module: 'play-services-base'
         exclude group: 'com.google.android.gms', module: 'play-services-maps'
     }
+    compile project(':react-native-image-picker')
     implementation 'com.google.android.gms:play-services-base:15.0.1'
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
@@ -161,7 +162,7 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 project.ext.vectoricons = [
-        iconFontNames: [ 'Ionicons.ttf' ] // Name of the font files you want to copy
+        iconFontNames: [ 'Ionicons.ttf','FontAwesome.ttf' ] // Name of the font files you want to copy
 ]
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 apply plugin: 'com.google.gms.google-services'

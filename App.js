@@ -18,17 +18,17 @@ import { StackNavigator, TabNavigator, NavigationActions } from 'react-navigatio
 //Tabs
 import ProfileTab from './tabs/profile/profile';
 import CommentsTab from './tabs/comments/comments';
-// import MapTab from './tabs/map/map';
-// import NotificationTab from './tabs/notifications/notifications';
-// //Stacks
-// import CommentDetailStack from './tabs/comments/tmpl/commentdetail';
-// import BumDetailStack from './tabs/bums/tmpl/bumdetail';
-// import AddCommentStack from './tabs/bums/tmpl/commentform';
-// import CreateBumStack from './tabs/bums/tmpl/createbumform';
-// import SearchStack from './tabs/search/search';
-// import SettingsStack from './tabs/profile/tmpl/settings';
-// import CommentStack from './tabs/comment/comment';
-// import UserDetailStack from './tabs/profile/tmpl/userdetail';
+import MapTab from './tabs/map/map';
+import NotificationTab from './tabs/notifications/notifications';
+//Stacks
+import CommentDetailStack from './tabs/comments/tmpl/commentdetail';
+import BumDetailStack from './tabs/bums/tmpl/bumdetail';
+import AddCommentStack from './tabs/bums/tmpl/commentform';
+import CreateBumStack from './tabs/bums/tmpl/createbumform';
+import SearchStack from './tabs/search/search';
+import SettingsStack from './tabs/profile/tmpl/settings';
+import CommentStack from './tabs/comment/comment';
+import UserDetailStack from './tabs/profile/tmpl/userdetail';
 
 
 const tabBarOptions = {
@@ -44,9 +44,9 @@ const tabBarOptions = {
 
 const tabsManagement = {
   Comments : { screen: CommentsTab },
-  // Map:{screen:MapTab},
-  // Notificiations:{screen:NotificationTab},
-  // Profile : { screen: ProfileTab }
+  Map:{screen:MapTab},
+  Notificiations:{screen:NotificationTab},
+  Profile : { screen: ProfileTab }
 }
 
 var tabNavigatorOptions = {
@@ -67,15 +67,15 @@ const Tabs = TabNavigator(
 
 const stackMangement = {
   Main:{screen:Tabs},
-  // CommentDetail:{screen:CommentDetailStack},
-  // BumDetail:{screen:BumDetailStack},
-  // CreateBumForm:{screen:CreateBumStack},
-  // SearchPage:{screen:SearchStack},
-  // AddCommentPage:{screen:AddCommentStack},
-  // ProfileStack : { screen: ProfileTab },
-  // SettingsStack:{ screen:SettingsStack },
-  // CommentStack:{screen:CommentStack},
-  // UserDetailStack:{screen:UserDetailStack}
+  CommentDetail:{screen:CommentDetailStack},
+  BumDetail:{screen:BumDetailStack},
+  CreateBumForm:{screen:CreateBumStack},
+  SearchPage:{screen:SearchStack},
+  AddCommentPage:{screen:AddCommentStack},
+  ProfileStack : { screen: ProfileTab },
+  SettingsStack:{ screen:SettingsStack },
+  CommentStack:{screen:CommentStack},
+  UserDetailStack:{screen:UserDetailStack}
 }
 const StackPage = StackNavigator(stackMangement);
 
@@ -96,11 +96,33 @@ export default class App extends Component<Props> {
     // this._handleConnectivityChange = this._handleConnectivityChange.bind(this);
     //this._signIn = this._signIn.bind(this)
   }
+
+  _signOut(){
+    var self = this;
+    console.log('App._signOut',this.state);
+    Auth.signOutBoth(function(response){
+      self.setState({user:null});
+    });
+  }
+
+  _signIn(callback){
+    var self = this;
+    Auth.isLogedIn(function(response){
+      console.log('App._signIn');
+      self.setState({
+        user:response
+      });
+      Cache.setUserSetting(response.settings);
+      return callback(true);
+    });
+  }
   render() {
     var self = this;
     return (
         <StackPage ref={nav => { this.navigator = nav; }} screenProps={{
-          user:self.state.user
+          user:self.state.user,
+          signIn:self._signIn.bind(this),
+          signOut:self._signOut.bind(this)
         }} />
       );
   }
