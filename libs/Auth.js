@@ -18,7 +18,7 @@ class Auth {
     GoogleSignin.hasPlayServices({ autoResolve: true }).then(() => {
         //console.log("hasPlayServices");
         GoogleSignin.configure({
-          iosClientId: '315634877630-i8e62m4r1qifg1qmm8b9b0m0gu39la85.apps.googleusercontent.com',
+          iosClientId: '315634877630-sqpu0kscfq56ithj4k9lif6f87d177hv.apps.googleusercontent.com',
           offlineAccess: false
         }).then(() => {
           // you can now call currentUserAsync()
@@ -195,7 +195,7 @@ class Auth {
       GoogleSignin.signIn()
       .then((user) => {
         //https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=
-        console.log('GoogleSignin.signIn',user);
+        console.log('GoogleSignin.signIn');
         if(user && user.idToken){
           self.getGoogleInfoViaIDToken(user.idToken, function(result){
             self.storeUserInfo(result,function(responseObj){

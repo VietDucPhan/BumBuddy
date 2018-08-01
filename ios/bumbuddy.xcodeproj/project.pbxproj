@@ -786,7 +786,7 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
-						TestTargetID = 13B07F861A680F5B00A75B9A;
+						DevelopmentTeam = G2E9DBDZ99;
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = G2E9DBDZ99;
@@ -1262,7 +1262,7 @@
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = G2E9DBDZ99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1286,15 +1286,14 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/bumbuddy.app/bumbuddy";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = G2E9DBDZ99;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
@@ -1314,7 +1313,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/bumbuddy.app/bumbuddy";
 			};
 			name = Release;
 		};
@@ -1347,7 +1345,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.bumbuddy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bumbuddy;
 				PRODUCT_NAME = bumbuddy;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1381,7 +1379,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.bumbuddy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bumbuddy;
 				PRODUCT_NAME = bumbuddy;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
