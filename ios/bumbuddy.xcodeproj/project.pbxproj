@@ -58,6 +58,7 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		BD4E732F9DC04CDEAA6448A7 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5689661654164B11877FF2D2 /* AddressBook.framework */; };
+		DC302B4DE72C4EBB95680542 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CD088EF9FFF4AF599A81482 /* libRNFetchBlob.a */; };
 		F774C9A0C94843109CDABAB6 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 692097236EBC4AAEA0568DDE /* libz.tbd */; };
 /* End PBXBuildFile section */
 
@@ -328,6 +329,13 @@
 			remoteGlobalIDString = 014A3B5C1C6CF33500B6D375;
 			remoteInfo = RNImagePicker;
 		};
+		3DEF73EB2124707000D570E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3254880C912E4F26A9045423 /* RNFetchBlob.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A15C300E1CD25C330074CB35;
+			remoteInfo = RNFetchBlob;
+		};
 		3DFD336721230D05004577D4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 038CB2749EA54C0B93778829 /* RNFirebase.xcodeproj */;
@@ -393,6 +401,8 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = bumbuddy/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = bumbuddy/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+		2CD088EF9FFF4AF599A81482 /* libRNFetchBlob.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFetchBlob.a; sourceTree = "<group>"; };
+		3254880C912E4F26A9045423 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFetchBlob.xcodeproj; path = "../node_modules/rn-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; };
 		3D065D1620DE4D2900FC0DE8 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		3D065D1720DE4D2900FC0DE8 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		3D065D1820DE4D2900FC0DE8 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
@@ -491,6 +501,7 @@
 				3DEF734F21245CA700D570E0 /* FirebaseCoreDiagnostics.framework in Frameworks */,
 				5BB543E70667429E98EB4EB1 /* libRNFirebase.a in Frameworks */,
 				3DEF734E21245CA700D570E0 /* FirebaseAnalytics.framework in Frameworks */,
+				DC302B4DE72C4EBB95680542 /* libRNFetchBlob.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -652,6 +663,7 @@
 			children = (
 				C2992CB3A5D44DEEB7D8FCE8 /* libRNGoogleSignin.a */,
 				8AAE8F4A79D242D08E523C67 /* libRNFirebase.a */,
+				2CD088EF9FFF4AF599A81482 /* libRNFetchBlob.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -705,6 +717,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		3DEF73E82124706F00D570E0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3DEF73EC2124707000D570E0 /* libRNFetchBlob.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		3DFD336421230D05004577D4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -752,6 +772,7 @@
 				DE40A7F407694638AD834CB6 /* RCTFBSDK.xcodeproj */,
 				5173C1EEA2F74D59A7DB11E4 /* RNGoogleSignin.xcodeproj */,
 				038CB2749EA54C0B93778829 /* RNFirebase.xcodeproj */,
+				3254880C912E4F26A9045423 /* RNFetchBlob.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -923,6 +944,10 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+				},
+				{
+					ProductGroup = 3DEF73E82124706F00D570E0 /* Products */;
+					ProjectRef = 3254880C912E4F26A9045423 /* RNFetchBlob.xcodeproj */;
 				},
 				{
 					ProductGroup = 3DFD336421230D05004577D4 /* Products */;
@@ -1209,6 +1234,13 @@
 			remoteRef = 3DC00E412110B1B900B3A5E9 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		3DEF73EC2124707000D570E0 /* libRNFetchBlob.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNFetchBlob.a;
+			remoteRef = 3DEF73EB2124707000D570E0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		3DFD336821230D05004577D4 /* libRNFirebase.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1346,14 +1378,13 @@
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/rn-fetch-blob/ios/**",
 				);
 				INFOPLIST_FILE = bumbuddyTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1375,14 +1406,13 @@
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/rn-fetch-blob/ios/**",
 				);
 				INFOPLIST_FILE = bumbuddyTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1417,6 +1447,7 @@
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 					"$(inherited)/Firebase/**",
+					"$(SRCROOT)/../node_modules/rn-fetch-blob/ios/**",
 				);
 				INFOPLIST_FILE = bumbuddy/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
@@ -1455,6 +1486,7 @@
 					"$(SRCROOT)/../node_modules/react-native-google-signin/ios/RNGoogleSignin/**",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 					"$(inherited)/Firebase/**",
+					"$(SRCROOT)/../node_modules/rn-fetch-blob/ios/**",
 				);
 				INFOPLIST_FILE = bumbuddy/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;

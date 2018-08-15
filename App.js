@@ -12,6 +12,8 @@ import {
   View
 } from 'react-native';
 import firebase from 'react-native-firebase';
+import RNFetchBlob from 'rn-fetch-blob';
+
 import AuthLib from './libs/Auth';
 import CacheLib from './libs/Cache';
 import { StackNavigator, TabNavigator, NavigationActions } from 'react-navigation';

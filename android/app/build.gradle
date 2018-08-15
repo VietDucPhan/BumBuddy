@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':rn-fetch-blob')
     compile project(':react-native-firebase')
     compile project(':react-native-google-signin')
     compile project(':react-native-fbsdk')
@@ -151,6 +152,8 @@ dependencies {
     }
     compile project(':react-native-image-picker')
     implementation project(':react-native-firebase')
+    implementation 'com.facebook.fresco:fresco:1.5.0'
+    implementation 'com.facebook.fresco:animated-gif:1.5.0'
 
     // Firebase dependencies
     implementation "com.google.firebase:firebase-messaging:17.1.0"
