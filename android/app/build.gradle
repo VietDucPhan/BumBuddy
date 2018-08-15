@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-firebase')
     compile project(':react-native-google-signin')
     compile project(':react-native-fbsdk')
     compile fileTree(dir: "libs", include: ["*.jar"])
@@ -149,6 +150,12 @@ dependencies {
         exclude group: 'com.google.android.gms', module: 'play-services-maps'
     }
     compile project(':react-native-image-picker')
+    implementation project(':react-native-firebase')
+
+    // Firebase dependencies
+    implementation "com.google.firebase:firebase-messaging:17.1.0"
+    implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
+    implementation "com.google.firebase:firebase-core:16.0.1"
     implementation 'com.google.android.gms:play-services-base:15.0.1'
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'

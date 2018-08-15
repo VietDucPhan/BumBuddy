@@ -11,7 +11,7 @@ import {
   Text,
   View
 } from 'react-native';
-
+import firebase from 'react-native-firebase';
 import AuthLib from './libs/Auth';
 import CacheLib from './libs/Cache';
 import { StackNavigator, TabNavigator, NavigationActions } from 'react-navigation';
@@ -116,6 +116,18 @@ export default class App extends Component<Props> {
       return callback(true);
     });
   }
+
+  componentDidMount() {
+    this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
+        // Process your token as required
+        alert(fcmToken);
+    });
+  }
+
+  componentWillUnmount() {
+    this.onTokenRefreshListener();
+  }
+
   render() {
     var self = this;
     return (
