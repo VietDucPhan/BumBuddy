@@ -24,8 +24,11 @@ import Icon from 'react-native-vector-icons/Ionicons';
 var ImagePicker = require('react-native-image-picker');
 import BumsLib from '../../../libs/Bums';
 import UploadLib from '../../../libs/Upload';
+import Css from '../../../libs/Css';
 import CacheLib from '../../../libs/Cache';
 import Loading from '../../../commons/loading';
+import ModalMenu from '../../../commons/modalmenu';
+
 var UploadModel = new UploadLib();
 var BumsModel = new BumsLib();
 var Cache = new CacheLib();
@@ -43,8 +46,11 @@ class CommentForm extends Component {
       level:null,
       ratingThisBum:false,
       overall_rating:0,
-      showActivitiIndicator:false
+      showActivitiIndicator:false,
+      showModalMenu:false,
+      videoSource:null
     }
+    //this.toggleCameraMenu.bind(this);
   }
 
   static navigationOptions = ({navigation}) => {
@@ -56,38 +62,60 @@ class CommentForm extends Component {
     ),}
   };
 
+  toggleCameraMenu(){
+    this.setState({
+      showModalMenu:!this.state.showModalMenu
+    });
+  }
+
+  toogleActivityIndicator(){
+    this.setState({
+      showActivitiIndicator:!this.state.showActivitiIndicator
+    });
+  }
+
   _onCreateClick(){
     var self = this;
 
     if(!self.state.showActivitiIndicator){
-      if(self.state.inputText || self.state.imageSource){
-        self.setState({
-          showActivitiIndicator:true
-        });
-        var commentData = {
-          token:self.props.screenProps.user.token,
-          bum:{
-            _id:this.props.navigation.state.params._id
-          },
-          description:self.state.inputText,
-          media:[]
-        };
-        if(self.state.ratingThisBum){
-          if(self.state.overall_rating > 0){
-            commentData.overall_rating = self.state.overall_rating;
-          }
+      self.setState({
+        showActivitiIndicator:true
+      });
+      var inputText = self.state.inputText;
+      var imageSource = self.state.imageSource;
+      var videoSource = self.state.videoSource;
+      var commentData = {
+        token:self.props.screenProps.user.token,
+        bum:{
+          _id:this.props.navigation.state.params._id
+        },
+        description:inputText,
+        media:[]
+      };
 
-          if(self.state.level){
-            commentData.bum_rating = self.state.level;
-          }
-
+      if(self.state.ratingThisBum){
+        if(self.state.overall_rating > 0){
+          commentData.overall_rating = self.state.overall_rating;
         }
 
+        if(self.state.level){
+          commentData.bum_rating = self.state.level;
+        }
+      }
 
-
-        if(self.state.imageSource){
+      if(inputText || imageSource || videoSource){
+        self.setState({
+          imageSource:null,
+          inputText:null,
+          videoSource:null,
+          ratingThisBum:false
+        });
+        if(imageSource){
           UploadModel.imageUploadToCloud(self.state.imageSource,function(response){
             if(response && response.errors){
+              self.setState({
+                showActivitiIndicator:false
+              });
               Alert.alert(
                 result.errors[0].title,
                 result.errors[0].detail,
@@ -100,6 +128,9 @@ class CommentForm extends Component {
               commentData.media.push(response);
               //alert("finished upload image");
               BumsModel.addComment(commentData,function(result){
+                self.setState({
+                    showActivitiIndicator:false
+                  });
                 if(result && result.errors){
                   Alert.alert(
                     result.errors[0].title,
@@ -110,9 +141,6 @@ class CommentForm extends Component {
                     { cancelable: false }
                   )
                 } else {
-                  self.setState({
-                    showActivitiIndicator:false
-                  });
                   self.props.navigation.state.params.update();
                   self.props.navigation.goBack();
                 }
@@ -120,9 +148,10 @@ class CommentForm extends Component {
               //self.props.navigation.navigate('BumDetail',{_id:result.data._id});
             }
           });
-        } else if(self.state.inputText){
-          BumsModel.addComment(commentData,function(result){
-            if(result && result.errors){
+        } else if (videoSource) {
+          UploadModel.videoUploadToCloud(self.state.videoSource,function(response){
+            console.log(response);
+            if(response && response.errors){
               self.setState({
                 showActivitiIndicator:false
               });
@@ -135,10 +164,45 @@ class CommentForm extends Component {
                 { cancelable: false }
               )
             } else {
-              //console.log("commentform.addcomment",result);
-              self.setState({
+              commentData.media.push(response);
+              //alert("finished upload image");
+              BumsModel.addComment(commentData,function(result){
+                self.setState({
+                    showActivitiIndicator:false
+                  });
+                if(result && result.errors){
+                  Alert.alert(
+                    result.errors[0].title,
+                    result.errors[0].detail,
+                    [
+                      {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                    ],
+                    { cancelable: false }
+                  )
+                } else {
+                  
+                  self.props.navigation.state.params.update();
+                  self.props.navigation.goBack();
+                }
+              })
+              self.props.navigation.navigate('BumDetail',{_id:result.data._id});
+            }
+          });
+        } else if(inputText){
+          BumsModel.addComment(commentData,function(result){
+            self.setState({
                 showActivitiIndicator:false
               });
+            if(result && result.errors){
+              Alert.alert(
+                result.errors[0].title,
+                result.errors[0].detail,
+                [
+                  {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                ],
+                { cancelable: false }
+              )
+            } else {
               self.props.navigation.state.params.update();
               self.props.navigation.goBack();
             }
@@ -146,9 +210,12 @@ class CommentForm extends Component {
         }
 
       } else {
+        self.setState({
+          showActivitiIndicator:false
+        });
         Alert.alert(
           "Input missing",
-          "Please enter text or choose an image to comment on bum",
+          "Please enter text, choose a media to comment on bum",
           [
             {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
           ],
@@ -157,6 +224,72 @@ class CommentForm extends Component {
       }
     }
 
+  }
+
+  launchVideoCamera(){
+    var self = this;
+    var options = {
+      mediaType:'video',
+      videoQuality:'high',
+      durationLimit:3
+    };
+    ImagePicker.launchCamera(options, (response)  => {
+    // Same code as in above section!
+    //console.log('launchVideoCamera',response);
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        self.setState({
+          videoSource:response
+        });
+      }
+    });
+  }
+
+  launchPictureCamera(){
+    var self = this;
+    var options = {
+      quality: 1.0,
+      maxWidth: 800,
+      maxHeight: 800,
+      allowsEditing:true
+    };
+    ImagePicker.launchCamera(options, (response)  => {
+    // Same code as in above section!
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else {
+        let source = { uri: 'data:image/jpeg;base64,' + response.data };
+        self.setState({
+          imageSource:source
+        });
+      }
+    });
+  }
+
+  launchImageLibrary(){
+    var self = this;
+    var options = {
+      
+    };
+    ImagePicker.launchImageLibrary(options, (response)  => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else {
+        let source = { uri: 'data:image/jpeg;base64,' + response.data };
+        self.setState({
+          imageSource:source
+        });
+      }
+    });
   }
 
   _getImageFromPhone(){
@@ -250,12 +383,29 @@ class CommentForm extends Component {
       }
     }();
     return(
-      <ScrollView style={styles.container}>
-        <Loading visible={this.state.showActivitiIndicator} />
-        <View style={styles.textInputContainer}>
+      <ScrollView style={Css.container}>
+        <Loading close={self.toogleActivityIndicator.bind(this)} visible={this.state.showActivitiIndicator} />
+        <ModalMenu
+          toggleModal={self.toggleCameraMenu.bind(this)}
+          visible={self.state.showModalMenu}
+          menus={[
+            {
+              name:'Take picture',
+              func:self.launchPictureCamera.bind(this)
+            },
+            {
+              name:'Take video',
+              func:self.launchVideoCamera.bind(this)
+            },
+            {
+              name:'Pick a photo',
+              func:self.launchImageLibrary.bind(this)
+            }
+            ]}/>
+        <View style={Css.textInputContainer}>
           <TextInput
             placeholder={'Text your bum'}
-            style={[styles.textInput]}
+            style={[Css.textInput]}
             onChangeText={(text) => this._inputChangeText(text)}
             value={this.state.inputText}
             multiline={true}
@@ -266,52 +416,52 @@ class CommentForm extends Component {
           >
           </TextInput>
         </View>
-        <View style={styles.actionContainer}>
-          <View style={styles.actionLeft}>
-            <TouchableOpacity onPress={()=>self._getImageFromPhone()} style={styles.button}>
+        <View style={Css.actionContainer}>
+          <View style={Css.actionLeft}>
+            <TouchableOpacity onPress={()=>self.toggleCameraMenu()} style={Css.button}>
               {self.state.imageSource ?
                 (
                   <Image style={{width:25,height:25,marginRight:10,borderRadius:10}}  source={self.state.imageSource} />
                 ) : (
-                  <Icon style={styles.buttonIcon} size={25} name="ios-image" color="#4267b2"/>
+                  <Icon style={Css.buttonIcon} size={25} name="ios-image" color="#4267b2"/>
                 )
 
               }
 
-              <Text>Photo</Text>
+              <Text>Photo / Video</Text>
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.actionContainer}>
-          <View style={styles.actionLeft}>
-            <TouchableOpacity onPress={()=>self._ratingThisBum()} style={styles.button}>
-              <Icon style={styles.buttonIcon} size={25} name="ios-pulse-outline" color="#4267b2"/>
+        <View style={Css.actionContainer}>
+          <View style={Css.actionLeft}>
+            <TouchableOpacity onPress={()=>self._ratingThisBum()} style={Css.button}>
+              <Icon style={Css.buttonIcon} size={25} name="ios-pulse-outline" color="#4267b2"/>
               <Text>Rate this bum</Text>
             </TouchableOpacity>
             <View>
             { self.state.ratingThisBum &&
-              <Icon style={styles.buttonIcon} size={25} name="ios-checkmark-outline" color="#4267b2"/>
+              <Icon style={Css.buttonIcon} size={25} name="ios-checkmark-outline" color="#4267b2"/>
             }
             </View>
           </View>
         </View>
         { self.state.ratingThisBum &&
-          <View style={[styles.ratingContainers]}>
-            <View style={[styles.ratingContainerTop,{alignItems:"center",marginTop:20}]}>
+          <View style={[Css.ratingContainers]}>
+            <View style={[Css.ratingContainerTop,{alignItems:"center",marginTop:20}]}>
               <Text>Overall Rating</Text>
-              <View style={styles.starRatingContainerTop}>
+              <View style={Css.starRatingContainerTop}>
                 {starRating.map(function(obj, i){
 
                   return (
-                    <Icon onPress={()=>self._starPress(i+1)} style={styles.star} color="#4267b2" key={i} size={25} name={obj}/>
+                    <Icon onPress={()=>self._starPress(i+1)} style={Css.star} color="#4267b2" key={i} size={25} name={obj}/>
                   );
                 })}
               </View>
 
             </View>
-            <View style={styles.ratingContainerBottom}>
+            <View style={Css.ratingContainerBottom}>
               <Picker
-                style={styles.pickerBorderColor}
+                style={Css.pickerBorderColor}
                 selectedValue={this.state.level}
                 onValueChange={(itemValue, itemIndex) => this.setState({level: itemValue})}>
                 <Picker.Item label="--- Bum Rating ---" value={null} />
@@ -329,69 +479,4 @@ class CommentForm extends Component {
     );
   }
 }
-const styles = StyleSheet.create({
-  container:{
-    backgroundColor:"white",
-    flex:1
-  },
-  loadingContainer:{
-    height:50
-  },
-  actionContainer:{
-    flexDirection: 'row',
-    paddingTop:5,
-    paddingBottom:5,
-    borderTopWidth:StyleSheet.hairlineWidth,
-    borderColor:"#ccc",
-
-  },
-  ratingContainers:{
-    paddingRight:10,
-    paddingLeft:10,
-  },
-  ratingContainerTop:{
-    borderTopWidth:StyleSheet.hairlineWidth,
-    borderRightWidth:StyleSheet.hairlineWidth,
-    borderLeftWidth:StyleSheet.hairlineWidth,
-    borderColor:"#4267b2"
-  },
-  starRatingContainerTop:{
-    flexDirection:'row'
-  },
-  ratingContainerBottom:{
-    borderWidth:StyleSheet.hairlineWidth,
-    borderColor:"#4267b2"
-  },
-  pickerBorderColor:{
-    borderColor:"#aaa"
-  },
-  actionLeft:{
-    flex:1,
-    flexDirection:"row",
-    justifyContent:"space-between"
-  },
-  actionRight:{
-    flex:1,
-    paddingLeft:2,
-  },
-  button:{
-    flex:1,
-    flexDirection: 'row',
-    alignItems:"center",
-    padding:5
-  },
-  buttonIcon:{
-    padding:5,
-    marginRight:10
-  },
-  textInputContainer:{
-    paddingBottom:5,
-      padding:5
-  },
-  textInput:{
-    padding:5,
-    height:150,
-    fontSize:18
-  }
-});
 module.exports = CommentForm;

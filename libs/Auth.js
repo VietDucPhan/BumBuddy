@@ -10,6 +10,9 @@ const {
 } = FBSDK;
 
  import UploadLib from './Upload';
+ import Fetch from './Fetch';
+ import CacheLib from './Cache';
+ var Cache = new CacheLib();
  var Upload = new UploadLib();
 
 class Auth {
@@ -18,8 +21,9 @@ class Auth {
     GoogleSignin.hasPlayServices({ autoResolve: true }).then(() => {
         //console.log("hasPlayServices");
         GoogleSignin.configure({
-          iosClientId: '315634877630-sqpu0kscfq56ithj4k9lif6f87d177hv.apps.googleusercontent.com',
-          offlineAccess: false
+          iosClientId: '315634877630-i8e62m4r1qifg1qmm8b9b0m0gu39la85.apps.googleusercontent.com',
+          webClientId: '315634877630-db2l7nu30c58hijkni5hg15o1lbf449d.apps.googleusercontent.com',
+          offlineAccess:true
         }).then(() => {
           // you can now call currentUserAsync()
           //console.log("hasPlayServices.then");
@@ -34,15 +38,15 @@ class Auth {
         console.log("Play services error", err.code, err.message);
       });
       //facebook login
-      AccessToken.getCurrentAccessToken().then(
-        (data) => {
-          //console.log(data);
-          if(data && data.accessToken){
-            self.getFacebookInfoViaAccessToken(data.accessToken,function(result){
-              //console.log("facebook info", result);
-            });
-          }
-      });
+      // AccessToken.getCurrentAccessToken().then(
+      //   (data) => {
+      //     //console.log(data);
+      //     if(data && data.accessToken){
+      //       self.getFacebookInfoViaAccessToken(data.accessToken,function(result){
+      //         //console.log("facebook info", result);
+      //       });
+      //     }
+      // });
   }
 
 
@@ -51,7 +55,7 @@ class Auth {
     AsyncStorage.getItem('user',function(error,result){
       var response = JSON.parse(result);
       if(!error && response && response.type){
-        //console.log('Auth.isLogedIn',response);
+        console.log('Auth.isLogedIn',response);
         return callback(response);
       } else {
         return callback(null);;
@@ -188,45 +192,135 @@ class Auth {
     }
   }
 
+  processSignin(data,callback){
+    if(data.data && data.data[0]){
+      profileData = data.data[0];
+      Cache.setUser(profileData);
+      if(profileData.profile_picture 
+       && profileData.profile_picture.secure_url
+       && profileData.profile_picture.secure_url != null 
+       && profileData.profile_picture.secure_url.search(profileData._id) == -1){
+        Upload.uploadProfilePictureUsingUrl(profileData.profile_picture.secure_url,profileData._id,function(res){
+          if(res && !res.errors){
+            var updateData = {
+              token:profileData.token,
+              data:{profile_picture:res}
+            }
+            Fetch.apiPOST('update-profile',updateData,function(result){
+              console.log('update-profile',result)
+              if(result && result.data){
+                Cache.setUser(result.data);
+                return callback(result);
+              } else if(result && result.errors){
+                return callback(data);
+              } else {
+                return callback({
+                  msg:'Unknown error please try again later',
+                  showMessage:true,
+                  errors:[{
+                    title:'unknown'
+                  }]
+                });
+              }
+            });
+          }
+          
+        })
+      } else {
+        return callback(data);
+      }
+    } else {
+      return callback(data);
+    }
+  }
+
   signInWithGoogle(callback){
     console.log('signInWithGoogle 1');
     var self = this;
     try{
       GoogleSignin.signIn()
       .then((user) => {
-        //https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=
-        console.log('GoogleSignin.signIn');
-        if(user && user.idToken){
-          self.getGoogleInfoViaIDToken(user.idToken, function(result){
-            self.storeUserInfo(result,function(responseObj){
-              if(responseObj){
-                console.log('Login google was successful');
-                return callback(true,responseObj);
-              } else {
-                console.log('Login google was failed');
-                return callback(false,responseObj);
+        if(user && user.accessToken){
+          var loginData = {
+                name:user.name,
+                email:user.email,
+                profile_picture:{secure_url:user.photo},
+                accessToken:user.accessToken,
+                type:'google'
               }
-            })
-          });
+              Cache.getPushToken(function(pushToken){
+                loginData.push_token = pushToken;
+                Fetch.apiPOST('login', loginData, (res)=>self.processSignin(res, function(data){
+                  return callback(data);
+                }));
+              });
         } else {
           console.log('GoogleSignin.signIn callback false');
-          return callback(false);
+          return callback({
+            msg:'Google login failed, please try again',
+            errors:[{title:'Google login failed, please try again'}],
+            showMessage:false
+          });
         }
        console.log('GoogleSignin.signIn.then');
       })
       .done();
     } catch(err){
-      console.log('WRONG SIGNIN',err);
+      return callback({
+            msg:'Google login failed, please try again',
+            errors:[{title:'Google login failed, please try again'}],
+            showMessage:true
+          });
     }
 
  }
 
+ signInWithFacebook(callback){
+    var self = this;
+    LoginManager.logInWithReadPermissions(['public_profile','email']).then(
+      function(result) {
+        if (result.isCancelled) {
+          console.log('Login was cancelled');
+          return callback({
+            msg:'Cancel login',
+            errors:[{title:'login cancel'}],
+            showMessage:false
+          });
+        } else {
+          AccessToken.getCurrentAccessToken().then(
+            (data) => {
+              console.log(data);
+              if(data && data.accessToken){
+                var loginData = {
+                  accessToken:data.accessToken,
+                  type:'facebook'
+                }
+                Cache.getPushToken(function(pushToken){
+                  loginData.push_token = pushToken;
+                  Fetch.apiPOST('login',loginData,(res)=>self.processSignin(res, function(data){
+                    return callback(data);
+                  }));
+                });
+              }
+            }
+          )
+        }
+      },
+      function(error) {
+        console.log('Login failed with error: ' , error);
+        return callback({
+            msg:'Login with facebook failed, please try again',
+            errors:[{title:'Login with facebook failed, please try again'}],
+            showMessage:true
+          });
+      }
+    );
+  }
+
  signOutWithGoogle(){
    GoogleSignin.signOut()
    .then(() => {
-     AsyncStorage.removeItem('user',function(){
-       console.log('delete user');
-     });
+     Cache.clearUser();
    })
    .catch((err) => {
 
@@ -274,74 +368,18 @@ class Auth {
       return false;
     }
   }
-  signInWithFacebook(callback){
-    var THIS = this;
-    LoginManager.logInWithReadPermissions(['public_profile','email']).then(
-      function(result) {
-        if (result.isCancelled) {
-          console.log('Login was cancelled');
-          return callback(false);
-        } else {
-          AccessToken.getCurrentAccessToken().then(
-            (data) => {
-              if(data && data.accessToken){
-                THIS.getFacebookInfoViaAccessToken(data.accessToken,function(result){
-                  //console.log('getFacebookInfoViaAccessToken');
-                  THIS.storeUserInfo(result,function(status,responseObj){
-                    if(status){
-                      console.log('Login facebook was successful');
-                      return callback(true,responseObj);
-                    } else {
-                      console.log('Login facebook was failed');
-                      return callback(false,responseObj);
-                    }
-                  })
-
-                });
-              }
-
-            }
-          )
-        }
-      },
-      function(error) {
-        console.log('Login failed with error: ' , error);
-        return callback(false);
-      }
-    );
-  }
+  
 
   signOutWithFacebook(){
-    AsyncStorage.removeItem('user',function(){
       LoginManager.logOut();
-      return true;
-    });
+      Cache.clearUser();
   }
 
  signOutBoth(callback){
    var self = this;
-   AsyncStorage.getItem("user",function(err,result){
-     var response = JSON.parse(result);
-     self.signOutWithGoogle();
-     self.signOutWithFacebook();
-     AsyncStorage.getItem("deviceToken",function(err,resultDeviceToken){
-       var parsedResultDeviceToken = JSON.parse(resultDeviceToken);
-       response.device_token = parsedResultDeviceToken;
-       fetch('https://bumbuddy.herokuapp.com/api/logout',
-       {
-         method: 'POST',
-         headers: {
-           'Accept': 'application/json',
-           'Content-Type': 'application/json'
-         },
-         body:JSON.stringify(response)
-       }).then((responseServer) => responseServer.json())
-         .then((responseJson) => {
-
-           return callback(true);
-         });
-     });
-   });
+   self.signOutWithGoogle();
+   self.signOutWithFacebook();
+   return callback(true);
  }
 }
 

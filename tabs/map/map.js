@@ -230,9 +230,20 @@ class Map extends Component {
       loadingVisible:!this.state.loadingVisible
     });
   }
+
+  _locateBtn(){
+    var self = this;
+    if(Platform.OS === 'ios'){
+      return(
+        <TouchableOpacity onPress={()=>self._locatorOnPress()} style={styles.locatorOnPressIcon}>
+          <Icon style={styles.iconOnLocator} name="ios-locate" size={27} />
+        </TouchableOpacity>
+      );
+    }
+  }
+  
   render() {
     var self = this;
-    //console.log(this.props.screenProps.user);
     return(
       <View style={[styles.mapContainer,{paddingTop: this.state.statusBarHeight }]}>
         <MapView
@@ -254,10 +265,9 @@ class Map extends Component {
             );
           })}
         </MapView>
+        {self._locateBtn()}
         <LoadingView close={self._closeBtn.bind(this)} name={self.state.loadingName} visible={self.state.loadingVisible}/>
-          <TouchableOpacity onPress={()=>self._locatorOnPress()} style={styles.locatorOnPressIcon}>
-            <Icon style={styles.iconOnLocator} name="ios-locate" size={27} />
-          </TouchableOpacity>
+          
 
           <TouchableOpacity onPress={()=>self._loadBumsAtCurrentLocation()} style={styles.refreshBums}>
             <Icon style={styles.iconRefresh} name="ios-refresh" size={35} />
@@ -285,14 +295,6 @@ class Map extends Component {
     locatorOnPressIcon:{
       position:"absolute",
       top:15,
-      ...Platform.select({
-      ios: {
-
-      },
-      android: {
-        display:"none",
-      },
-      }),
       right:12,
       justifyContent:"center",
       alignItems:"center",

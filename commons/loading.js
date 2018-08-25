@@ -13,6 +13,7 @@ import {
   ActivityIndicator
  } from 'react-native';
  import Icon from 'react-native-vector-icons/Ionicons';
+ import Css from '../libs/Css';
 
 class loading extends Component {
   constructor(props){
@@ -25,7 +26,10 @@ class loading extends Component {
   static defaultProps = {
     name:"loading",
     visible:false,
-    loadingAnimation:false
+    loadingAnimation:false,
+    close:function(){
+      this.props.visible = !this.props.visible;
+    }
   }
 
   static propTypes = {
@@ -40,7 +44,7 @@ class loading extends Component {
 
   close(){
     var self = this;
-    self.props.close()
+    self.props.close();
   }
 
   viewContent(){
@@ -48,25 +52,25 @@ class loading extends Component {
     switch (self.props.name) {
       case "loading":
         return(
-          <View style={styles.middleBox}>
+          <View style={Css.middleBox}>
             <ActivityIndicator animating={true}/>
-            <Text style={styles.message}>Loading</Text>
+            <Text style={Css.message}>Loading</Text>
           </View>
         );
         break;
       case "done":
         return(
-          <View style={styles.middleBox}>
+          <View style={Css.middleBox}>
             <Icon style={{color:"green"}} name="md-checkmark-circle" size={25} />
-            <Text style={styles.message}>Done</Text>
+            <Text style={Css.message}>Done</Text>
           </View>
         );
         break;
       default:
       return(
-        <View style={styles.middleBox}>
+        <View style={Css.middleBox}>
           <Icon style={{color:"red"}} name="ios-alert" size={25} />
-          <Text style={styles.message}>Done</Text>
+          <Text style={Css.message}>Done</Text>
         </View>
       );
 
@@ -82,10 +86,10 @@ class loading extends Component {
         visible={self.props.visible}
         onRequestClose={() => {self.close()}}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.middleBoxContainer}>
+        <View style={Css.modalContainer}>
+          <View style={Css.middleBoxContainer}>
             {self.props.name !== "loading" &&
-              <Icon onPress={()=>self.close()} style={styles.closeBtn} name="ios-close-circle" size={25} />
+              <Icon onPress={()=>self.close()} style={Css.closeBtn} name="ios-close-circle" size={25} />
             }
             {self.viewContent()}
           </View>
@@ -96,36 +100,5 @@ class loading extends Component {
     );
   }
 }
-  const styles = StyleSheet.create({
-    modalContainer:{
-      flex:1,
-      justifyContent:"center",
-      alignItems:"center",
-      backgroundColor:'rgba(241,242,243,0.7)'
-    },
-    middleBoxContainer:{
-      backgroundColor:"#fff",
-      padding:10,
-      borderRadius:10,
-      width:100,
-      height:100,
-      borderColor:"#eee",
-      alignItems:"center",
-      justifyContent:"center",
-      borderWidth:StyleSheet.hairlineWidth
-    },
-    middleBox:{
-      alignItems:"center",
-      justifyContent:"center"
-    },
-    message:{
-      marginTop:10
-    },
-    closeBtn:{
-      position:"absolute",
-      top:-10,
-      right:-10,
-      backgroundColor:'transparent'
-    }
-  });
+
 module.exports = loading;

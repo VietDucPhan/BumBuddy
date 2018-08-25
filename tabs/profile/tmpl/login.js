@@ -23,6 +23,7 @@ class LoginView extends Component {
       showActivitiIndicator:false
     }
     this.facebookLogin = this.facebookLogin.bind(this);
+    this.processLogin = this.processLogin.bind(this);
   }
   facebookLogin(){
     var self = this;
@@ -30,38 +31,36 @@ class LoginView extends Component {
     self.setState({
       showActivitiIndicator:true
     });
-    Auth.signInWithFacebook(function(err,res){
-      if(err){
-        self.props.signIn(function(err){
-          self.setState({
-            showActivitiIndicator:false
-          });
-        });
-      }
-    });
+    Auth.signInWithFacebook((res)=>self.processLogin(res));
   }
   googleLogin(){
     var self = this;
     self.setState({
       showActivitiIndicator:true
     });
-    Auth.signInWithGoogle(function(err,res){
-      if(err){
-        console.log('login.googleLogin', err);
-        self.props.signIn(function(err){
-          self.setState({
-            showActivitiIndicator:false
-          });
+    Auth.signInWithGoogle((res)=>self.processLogin(res));
+  }
+
+  processLogin(res){
+    var self = this;
+    console.log(res);
+    self.setState({
+          showActivitiIndicator:false
         });
-      }
-    });
+    if(res.data){
+      self.props.signIn(function(err){
+        
+      });
+    } else if(res.errors && res.showMessage) {
+      alert(res.msg);
+    }
   }
 
   sendNotification(){
     Cache.getDeviceToken(function(token){
-      console.log("getDeviceToken",token);
+      //console.log("getDeviceToken",token);
       var tokenString = JSON.stringify(token);
-      alert("token: "+tokenString);
+      //alert("token: "+tokenString);
     });
   }
 

@@ -9,10 +9,10 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  AsyncStorage
 } from 'react-native';
 import firebase from 'react-native-firebase';
-import RNFetchBlob from 'rn-fetch-blob';
 
 import AuthLib from './libs/Auth';
 import CacheLib from './libs/Cache';
@@ -90,7 +90,6 @@ type Props = {};
 export default class App extends Component<Props> {
   constructor(props) {
     super(props);
-    //AsyncStorage.removeItem('user',function(){});
     this.state = {
       isConnected:null,
       user:null
@@ -111,18 +110,52 @@ export default class App extends Component<Props> {
     var self = this;
     Auth.isLogedIn(function(response){
       console.log('App._signIn');
-      self.setState({
-        user:response
-      });
-      Cache.setUserSetting(response.settings);
-      return callback(true);
+      if(response){
+          self.setState({
+          user:response
+        });
+        Cache.setUserSetting(response.settings);
+        return callback(true);
+      }
+      return callback(false);
     });
   }
 
   componentDidMount() {
+    firebase.messaging().hasPermission()
+      .then(enabled => {
+        if (!enabled) {
+          firebase.messaging().requestPermission().then(() => {
+              // User has authorised  
+          })
+          .catch(error => {
+            console.log(error);
+            // User has rejected permissions  
+          });
+        }
+      });
+    Cache.getPushToken(function(cacheToken){
+      console.log('cacheToken',cacheToken);
+      if(!cacheToken){
+        //console.log('cacheToken in if',cacheToken);
+        firebase.messaging().getToken().then(fcmToken => {
+          //console.log('getToken',fcmToken);
+          if (fcmToken) {
+                  Cache.setPushToken(fcmToken);
+              }
+        });
+      }
+    });
     this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
         // Process your token as required
-        alert(fcmToken);
+        Cache.getPushToken(function(cacheToken){
+          if(fcmToken && fcmToken != cacheToken){
+            Cache.setPushToken(fcmToken);
+          }
+        });
+    });
+    this._signIn(function(res){
+      
     });
   }
 
@@ -141,26 +174,3 @@ export default class App extends Component<Props> {
       );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-   ...StyleSheet.absoluteFillObject,
-   height: 400,
-   width: 400,
-   justifyContent: 'flex-end',
-   alignItems: 'center',
- },
- map: {
-   ...StyleSheet.absoluteFillObject,
- },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});

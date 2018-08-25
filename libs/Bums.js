@@ -204,7 +204,7 @@ class Bums {
       .then((responseJson) => {
         return callback(responseJson);
     }).catch((error) => {
-        console.log('Bums.getBumsComments',error);
+        console.log('Bums.getBumsComments.erros',error);
         return callback({errors:[
           {
             status:'m005',

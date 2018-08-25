@@ -1,44 +1,114 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  viewContainer1st:{
+  modalContainer:{
     flex:1,
-    paddingTop:15
+    justifyContent:"center",
+    alignItems:"center",
+    backgroundColor:'rgba(241,242,243,0.7)'
   },
-  map: {
-    flex: 1
+  middleBoxContainer:{
+    backgroundColor:"#fff",
+    padding:10,
+    borderRadius:10,
+    width:100,
+    height:100,
+    borderColor:"#eee",
+    alignItems:"center",
+    justifyContent:"center",
+    borderWidth:StyleSheet.hairlineWidth
   },
-  locator:{
-    position: "absolute",
-    bottom:20,
-    right:10
+  middleBoxMenuModalContainer:{
+    width:250,
+    height:'auto',
   },
-  navigatorBtn:{
+  middleBox:{
+    alignItems:"center",
+    justifyContent:"center"
+  },
+  message:{
+    marginTop:10
+  },
+  closeBtn:{
+    position:"absolute",
+    top:-10,
+    right:-10,
+    backgroundColor:'transparent'
+  },
+  modalMenuContentContainer:{
+    borderBottomWidth:StyleSheet.hairlineWidth,
+    borderColor:"#eee",
+    alignSelf: 'stretch',
     padding:10
   },
-  normalViewContainer:{
-    marginTop:64,
-    paddingLeft:10,
-    paddingRight:10
+  modalMenuContent:{
+    textAlign: 'center',
+    fontSize:20,
+    color:"#0070c9"
+
   },
-  navigatorBarStyle:{
-    backgroundColor:"white"
+  container:{
+    backgroundColor:"white",
+    flex:1
   },
-  inputText:{
-    flex:1,
-    textAlignVertical:"top",
-    padding:10,
+  loadingContainer:{
+    height:50
+  },
+  actionContainer:{
+    flexDirection: 'row',
+    paddingTop:5,
+    paddingBottom:5,
+    borderTopWidth:StyleSheet.hairlineWidth,
     borderColor:"#ccc",
-    borderStyle:"dotted",
-    borderWidth:1,
-    marginTop:10,
-    marginBottom:10
+
   },
-  markerActionButton:{
-    marginRight:20
+  ratingContainers:{
+    paddingRight:10,
+    paddingLeft:10,
   },
-  viewDividerHorizontal:{borderColor:"#ccc",
-  borderStyle:"dotted",
-  borderWidth:1, marginBottom:10}
+  ratingContainerTop:{
+    borderTopWidth:StyleSheet.hairlineWidth,
+    borderRightWidth:StyleSheet.hairlineWidth,
+    borderLeftWidth:StyleSheet.hairlineWidth,
+    borderColor:"#4267b2"
+  },
+  starRatingContainerTop:{
+    flexDirection:'row'
+  },
+  ratingContainerBottom:{
+    borderWidth:StyleSheet.hairlineWidth,
+    borderColor:"#4267b2"
+  },
+  pickerBorderColor:{
+    borderColor:"#aaa"
+  },
+  actionLeft:{
+    flex:1,
+    flexDirection:"row",
+    justifyContent:"space-between"
+  },
+  actionRight:{
+    flex:1,
+    paddingLeft:2,
+  },
+  button:{
+    flex:1,
+    flexDirection: 'row',
+    alignItems:"center",
+    padding:5
+  },
+  buttonIcon:{
+    padding:5,
+    marginRight:10
+  },
+  textInputContainer:{
+    paddingBottom:5,
+      padding:5
+  },
+  textInput:{
+    padding:5,
+    height:150,
+    fontSize:18
+  }
 });
 module.exports = styles;

@@ -18,6 +18,55 @@ class Cache {
     }
   }
 
+  setUser(userData){
+    if(userData && userData.token && userData.email){
+      AsyncStorage.setItem('user',JSON.stringify(userData),function(err){
+        if(!err){
+          //console.log("login to heroku successful",responseJson.content);
+          return true
+        } else{
+          //console.log("login to heroku fail","something went wrong while trying to store");
+          return false;
+        }
+      });
+    } else {
+      return false;
+    }
+  }
+
+  clearUser(){
+    AsyncStorage.removeItem('user',function(){
+      return true;
+     });
+  }
+
+  setPushToken(token){
+    var self = this;
+    if(token){
+      AsyncStorage.setItem("pushToken",JSON.stringify(token),function(err){
+        if(!err){
+          return true;
+        } else{
+          return false;
+        }
+      });
+    }
+  }
+
+  getPushToken(callback){
+    AsyncStorage.getItem("pushToken",function(err,result){
+      //console.log('getPushToken',err);
+      if(result){
+        var response = JSON.parse(result);
+        return callback(response);
+      }
+      
+      return callback(response);
+      
+    });
+  }
+
+//obsolete
   setDeviceToken(token){
     var self = this;
     if(token){
@@ -31,7 +80,7 @@ class Cache {
       });
     }
   }
-
+//obsolete
   getDeviceToken(callback){
     AsyncStorage.getItem("deviceToken",function(err,result){
       //console.log('getRating',err);

@@ -14,6 +14,7 @@ import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.soloader.SoLoader;
 import com.imagepicker.ImagePickerPackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +38,8 @@ public class MainApplication extends Application implements ReactApplication {
               new FBSDKPackage(mCallbackManager),
               new MapsPackage(),
               new ImagePickerPackage(),
-              new RNFirebaseMessagingPackage()
+              new RNFirebaseMessagingPackage(),
+              new RNFirebaseAdMobPackage()
       );
     }
 

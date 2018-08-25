@@ -1,10 +1,15 @@
 
 import {
-  AsyncStorage
+  AsyncStorage,
+  Platform
 } from 'react-native';
 import Sha1 from './Sha1';
+import RNFetchBlob from 'rn-fetch-blob';
 class Upload {
   constructor(){
+    this.api_key = '955818184181287';
+    this.appendix_key = '7YWoy9IjOttmpg7pNm-ejOjIg-s';
+    this.prependix_url = 'https://api.cloudinary.com/v1_1/dsthiwwp4/';
   }
 
   /**
@@ -61,6 +66,63 @@ class Upload {
 
       });
   }
+
+  async videoUploadToCloud(mediaData,callback){
+    var self = this;
+    var timestamp = Date.now();
+    var signature = Sha1.hash("timestamp=" + timestamp + self.appendix_key);
+    var uriArr = mediaData.uri.split("/");
+    var lastIndex = uriArr.length - 1;
+
+    if(Platform.OS === "ios"){
+      mediaData.uri = mediaData.uri.replace("file://","");
+    }
+    try {
+      RNFetchBlob.fetch('POST', 'https://api.cloudinary.com/v1_1/dsthiwwp4/video/upload',
+      {
+        'Content-Type': 'multipart/form-data',
+      },
+      [
+        {name: 'file', filename: uriArr[lastIndex], data: RNFetchBlob.wrap(mediaData.uri)},
+        {name: 'api_key', data: self.api_key},
+        {name: 'timestamp', data: timestamp.toString()},
+        {name: 'signature', data: signature}
+      ]).then((response) => response.json())
+        .then((responseJson) => {
+          console.log(responseJson);
+          responseJson.secure_url = "https://res.cloudinary.com/dsthiwwp4/video/upload/e_loop/" + responseJson.public_id + ".gif";
+          return callback(responseJson);
+        }).catch((err) => {
+        console.log(err);
+        return callback({
+          msg:'There is an error while uploading video, please try again later',
+          errors:
+          [
+            {
+              status:'m009',
+              source:{pointer:"libs/upload.imageUploadToCloud"},
+              title:"Could not upload video",
+              detail:error.message
+            }
+          ]
+          });
+      });
+    } catch(err) {
+      return callback({
+        msg:err.message,
+        errors:
+        [
+          {
+            status:'m009',
+            source:{pointer:"libs/upload.imageUploadToCloud"},
+            title:err.message,
+            detail:err.message
+          }
+        ]
+      });
+    }
+  }
+
 
 
   uploadProfilePictureUsingUrl(url,public_id,callback){
