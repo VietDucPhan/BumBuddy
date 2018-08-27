@@ -10,7 +10,7 @@ class Cache {
   isExpired(numberMinute, date, callback){
     var seconds = Math.floor((new Date() - new Date(date))/1000);
     var minute = Math.floor(seconds/60) ;
-    console.log("minute",minute);
+    //console.log("minute",minute);
     if(numberMinute > minute){
       return callback(false);
     } else {
@@ -174,7 +174,7 @@ class Cache {
     if(data && _id){
       data.store_date = new Date();
       AsyncStorage.setItem("comment-"+_id,JSON.stringify(data),function(err){
-        console.log('cache.setComments',_id);
+        //console.log('cache.setComments',_id);
         if(!err){
           //console.log('cache.set',data);
           return true;
@@ -192,7 +192,7 @@ class Cache {
     if(_id && _id != null){
       AsyncStorage.getItem("comment-"+_id,function(err,result){
         var response = JSON.parse(result);
-        console.log("getComments",response)
+        //console.log("getComments",response)
         if(result){
           self.isExpired(1,response.store_date,function(flag){
             //console.log("getComments",flag)

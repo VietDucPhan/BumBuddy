@@ -18,7 +18,7 @@ class Bums {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      console.log("Bums._uploadToHeroku.then",responseJson);
+      //console.log("Bums._uploadToHeroku.then",responseJson);
       return callback(responseJson);
     }).catch((error) => {
       return callback({errors:[
@@ -44,7 +44,7 @@ class Bums {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      console.log("Bums._uploadToHeroku.then",responseJson);
+      //console.log("Bums._uploadToHeroku.then",responseJson);
       return callback(responseJson);
     }).catch((error) => {
       return callback({errors:[
@@ -70,7 +70,7 @@ class Bums {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      console.log("getSurroundBum",responseJson);
+      //console.log("getSurroundBum",responseJson);
       return callback(responseJson);
     }).catch((error) => {
       return callback({errors:[
@@ -123,7 +123,7 @@ class Bums {
       .then((responseJson) => {
         return callback(responseJson);
     }).catch((error) => {
-        console.log('Bums.getBum',error);
+        //console.log('Bums.getBum',error);
         return callback({errors:[
           {
             status:'m003',
@@ -164,7 +164,7 @@ class Bums {
 
   getComment(_id,callback){
     var self = this;
-    console.log("Bums.getComments",_id);
+    //console.log("Bums.getComments",_id);
     fetch('https://bumbuddy.herokuapp.com/api/get-comment',
     {
       method: 'POST',
@@ -177,7 +177,7 @@ class Bums {
       .then((responseJson) => {
         return callback(responseJson);
     }).catch((error) => {
-        console.log('Bums.getComments',error);
+        //console.log('Bums.getComments',error);
         return callback({errors:[
           {
             status:'m004',
@@ -243,7 +243,7 @@ class Bums {
 
   addReply(data,callback){
     var self = this;
-    console.log("addReply data",data);
+    //console.log("addReply data",data);
     fetch('https://bumbuddy.herokuapp.com/api/add-reply',
     {
       method: 'POST',

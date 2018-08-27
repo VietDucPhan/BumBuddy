@@ -292,48 +292,6 @@ class CommentForm extends Component {
     });
   }
 
-  _getImageFromPhone(){
-    var self = this;
-    var options = {
-      title: 'Select Image',
-      quality: 1.0,
-      maxWidth: 800,
-      maxHeight: 800,
-      customButtons: [],
-      storageOptions: {
-        skipBackup: true,
-        path: 'images'
-      }
-    };
-    if(self.state.imageSource != null){
-      options.customButtons.push({name: 'Remove', title: 'Remove image'});
-    }
-    ImagePicker.showImagePicker(options, (response) => {
-      //console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      }
-      else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      }
-      else if (response.customButton) {
-        self.setState({
-          imageSource:null
-        });
-      }
-      else {
-        let source = { uri: 'data:image/jpeg;base64,' + response.data };
-        self.setState({
-          imageSource:source
-        });
-
-        // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-      }
-    });
-  }
-
   componentDidMount(){
     var self = this;
     self.props.navigation.setParams({

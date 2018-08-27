@@ -14,7 +14,7 @@ Fetch.apiPOST = function(api, data, callback){
        showMessage:true
     });
   }
-  console.log('apiPost',data);
+  //console.log('apiPost',data);
   var url = Config.apiPrefix + api;
   fetch(url, {
       method: 'POST',

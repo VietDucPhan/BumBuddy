@@ -13,6 +13,7 @@ import {
   AsyncStorage
 } from 'react-native';
 import firebase from 'react-native-firebase';
+import type { Notification, NotificationOpen } from 'react-native-firebase';
 
 import AuthLib from './libs/Auth';
 import CacheLib from './libs/Cache';
@@ -94,13 +95,18 @@ export default class App extends Component<Props> {
       isConnected:null,
       user:null
     };
+    const channel = new firebase.notifications.Android.Channel('bum-buddy', 'Bum Buddy', firebase.notifications.Android.Importance.Max)
+      .setDescription('Bum Buddy notification');
+
+    // Create the channel
+    firebase.notifications().android.createChannel(channel);
     // this._handleConnectivityChange = this._handleConnectivityChange.bind(this);
     //this._signIn = this._signIn.bind(this)
   }
 
   _signOut(){
     var self = this;
-    console.log('App._signOut',this.state);
+    //console.log('App._signOut',this.state);
     Auth.signOutBoth(function(response){
       self.setState({user:null});
     });
@@ -109,7 +115,7 @@ export default class App extends Component<Props> {
   _signIn(callback){
     var self = this;
     Auth.isLogedIn(function(response){
-      console.log('App._signIn');
+      //console.log('App._signIn');
       if(response){
           self.setState({
           user:response
@@ -157,10 +163,62 @@ export default class App extends Component<Props> {
     this._signIn(function(res){
       
     });
+
+    this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
+        // Get the action triggered by the notification being opened
+        console.log('notificationOpenedListener',notificationOpen.notification);
+    });
+    this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification: Notification) => {
+        // Process your notification as required
+        console.log('notificationDisplayedListener',notification);
+    });
+    this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
+        // listen when app in the foreground
+        if(notification && notification.notificationId){
+          let title = 'Bum Buddy';
+          let body = 'You have a new notification';
+          let id = notification.notificationId;
+          let data = {};
+          if(notification.title){
+            title = notification.title;
+          }
+
+          if(notification.body){
+            body = notification.body;
+          }
+
+          if(notification.data){
+            data = notification.data;
+          }
+          const localNotification = new firebase.notifications.Notification()
+            .android.setChannelId('bum-buddy')
+            .setNotificationId(id)
+            .setTitle(title)
+            .setBody(body)
+            .setData(data);
+          firebase.notifications().displayNotification(localNotification);
+      }
+    });
+    firebase.notifications().getInitialNotification()
+      .then((notificationOpen: NotificationOpen) => {
+        
+        if (notificationOpen) {
+          // App was opened by a notification
+          // Get the action triggered by the notification being opened
+          const action = notificationOpen.action;
+          // Get information about the notification that was opened
+          const notification: Notification = notificationOpen.notification;  
+          console.log('getInitialNotification',notification);
+          console.log('getInitialNotification action',action);
+        }
+      });
   }
 
   componentWillUnmount() {
     this.onTokenRefreshListener();
+    this.notificationOpenedListener();
+    this.notificationDisplayedListener();
+    this.notificationListener();
   }
 
   render() {

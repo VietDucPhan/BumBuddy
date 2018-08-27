@@ -55,7 +55,7 @@ class Auth {
     AsyncStorage.getItem('user',function(error,result){
       var response = JSON.parse(result);
       if(!error && response && response.type){
-        console.log('Auth.isLogedIn',response);
+        //console.log('Auth.isLogedIn',response);
         return callback(response);
       } else {
         return callback(null);;
@@ -104,13 +104,13 @@ class Auth {
               var content = responseJson.content;
               if(responseJson.content && responseJson.content.profile_picture && responseJson.content.profile_picture.secure_url && responseJson.content.profile_picture.secure_url.search(responseJson.content._id) == -1){
                 Upload.uploadProfilePictureUsingUrl(responseJson.content.profile_picture.secure_url,responseJson.content._id,function(response){
-                  console.log("storeUserInfo1",response);
+                  //console.log("storeUserInfo1",response);
                   self.updateProfile(responseJson.content.token,{profile_picture:response},function(respond){
 
                     if(respond.error){
                       return callback(false);
                     } else {
-                      console.log("updateProfile",respond);
+                      //console.log("updateProfile",respond);
                       AsyncStorage.setItem('user',JSON.stringify(respond.data[0]),function(err){
                         if(!err){
                           //console.log("login to heroku successful",responseJson.content);
@@ -136,7 +136,7 @@ class Auth {
                 });
               }
             } else {
-              console.log("login to heroku fail","something went wrong while trying to loggin");
+              //console.log("login to heroku fail","something went wrong while trying to loggin");
               return callback(false);
             }
           }).catch((error) => {
@@ -145,7 +145,7 @@ class Auth {
           });
         });
       } else {
-        console.log("wrong user info","there is no email and name");
+        //console.log("wrong user info","there is no email and name");
       }
 
   }
@@ -207,7 +207,7 @@ class Auth {
               data:{profile_picture:res}
             }
             Fetch.apiPOST('update-profile',updateData,function(result){
-              console.log('update-profile',result)
+              //console.log('update-profile',result)
               if(result && result.data){
                 Cache.setUser(result.data);
                 return callback(result);

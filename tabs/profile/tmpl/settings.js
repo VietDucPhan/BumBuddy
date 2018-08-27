@@ -137,6 +137,7 @@ class SettingView extends Component {
                 value={self.state.username}
                 returnKeyType={"done"}
                 placeholderTextColor={"#ccc"}
+                underlineColorAndroid="transparent"
               />
             }
           </View>
@@ -185,6 +186,8 @@ const styles = StyleSheet.create({
   },
   textInput:{
     height:25,
+    paddingVertical: 0
+
   }
 });
 module.exports = SettingView;
