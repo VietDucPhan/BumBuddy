@@ -184,7 +184,8 @@ class Auth {
           }
         }
       }).catch((error) => {
-        console.error(error);
+        console.log('developer');
+        console.log(error);
         return false;
       });
     } else {
@@ -240,6 +241,7 @@ class Auth {
     try{
       GoogleSignin.signIn()
       .then((user) => {
+        console.log(user);
         if(user && user.accessToken){
           var loginData = {
                 name:user.name,
@@ -294,7 +296,7 @@ class Auth {
                 var loginData = {
                   accessToken:data.accessToken,
                   type:'facebook'
-                }
+                };
                 Cache.getPushToken(function(pushToken){
                   loginData.push_token = pushToken;
                   Fetch.apiPOST('login',loginData,(res)=>self.processSignin(res, function(data){

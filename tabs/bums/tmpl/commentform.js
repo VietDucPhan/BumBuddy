@@ -292,6 +292,26 @@ class CommentForm extends Component {
     });
   }
 
+  launchVideoLibrary(){
+    var self = this;
+    var options = {
+      mediaType:'video',
+      durationLimit:3,
+      allowsEditing:true
+    };
+    ImagePicker.launchImageLibrary(options, (response)  => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        self.setState({
+          videoSource:response
+        });
+      }
+    });
+  }
+
   componentDidMount(){
     var self = this;
     self.props.navigation.setParams({
@@ -352,12 +372,16 @@ class CommentForm extends Component {
               func:self.launchPictureCamera.bind(this)
             },
             {
-              name:'Take video',
+              name:'Take video(3s)',
               func:self.launchVideoCamera.bind(this)
             },
             {
-              name:'Pick a photo',
+              name:'Choose from photo library',
               func:self.launchImageLibrary.bind(this)
+            },
+            {
+              name:'Choose from video library',
+              func:self.launchVideoLibrary.bind(this)
             }
             ]}/>
         <View style={Css.textInputContainer}>
@@ -394,7 +418,7 @@ class CommentForm extends Component {
           <View style={Css.actionLeft}>
             <TouchableOpacity onPress={()=>self._ratingThisBum()} style={Css.button}>
               <Icon style={Css.buttonIcon} size={25} name="ios-pulse-outline" color="#4267b2"/>
-              <Text>Rate this bum</Text>
+              <Text>Rate this gun</Text>
             </TouchableOpacity>
             <View>
             { self.state.ratingThisBum &&

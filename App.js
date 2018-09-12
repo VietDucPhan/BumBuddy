@@ -128,6 +128,7 @@ export default class App extends Component<Props> {
   }
 
   componentDidMount() {
+    var self = this;
     firebase.messaging().hasPermission()
       .then(enabled => {
         if (!enabled) {
@@ -166,7 +167,19 @@ export default class App extends Component<Props> {
 
     this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
         // Get the action triggered by the notification being opened
-        console.log('notificationOpenedListener',notificationOpen.notification);
+        const notification: Notification = notificationOpen.notification;
+        //console.log(notification.data.content);
+          if(notification && notification.data && notification.data.content){
+            var data_payload = JSON.parse(notification.data.content);
+            if(data_payload.typeOfNotification == "voted" || data_payload.typeOfNotification == "replied"){
+              //console.log('data_payload.onID',data_payload.onID);
+              if(self.navigator){
+                self.navigator.dispatch(
+                  NavigationActions.navigate({ routeName: "CommentStack", params:{commentID:data_payload.onID} })
+                );
+              }
+            }
+          }
     });
     this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification: Notification) => {
         // Process your notification as required
@@ -203,13 +216,19 @@ export default class App extends Component<Props> {
       .then((notificationOpen: NotificationOpen) => {
         
         if (notificationOpen) {
-          // App was opened by a notification
-          // Get the action triggered by the notification being opened
           const action = notificationOpen.action;
-          // Get information about the notification that was opened
           const notification: Notification = notificationOpen.notification;  
-          console.log('getInitialNotification',notification);
-          console.log('getInitialNotification action',action);
+          if(notification.data && notification.data.content){
+            var data_payload = JSON.parse(notification.data.content);
+
+            if(data_payload.typeOfNotification == "voted" || data_payload.typeOfNotification == "replied"){
+              if(self.navigator){
+                self.navigator.dispatch(
+                  NavigationActions.navigate({ routeName: "CommentStack", params:{commentID:data_payload.onID} })
+                );
+              }
+            }
+          }
         }
       });
   }
@@ -224,7 +243,7 @@ export default class App extends Component<Props> {
   render() {
     var self = this;
     return (
-        <StackPage ref={nav => { this.navigator = nav; }} screenProps={{
+        <StackPage ref={nav => { self.navigator = nav; }} screenProps={{
           user:self.state.user,
           signIn:self._signIn.bind(this),
           signOut:self._signOut.bind(this)

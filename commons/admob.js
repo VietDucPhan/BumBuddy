@@ -1,39 +1,27 @@
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import firebase from 'react-native-firebase';
+const Banner = firebase.admob.Banner;
+const AdRequest = firebase.admob.AdRequest;
+const request = new AdRequest();
 import {
-  StyleSheet,
-  AppRegistry,
   View,
-  TouchableOpacity,
-  Alert,
-  Modal,
-  TextInput,
-  Text,
-  ActivityIndicator,
+  StyleSheet,
   Platform
  } from 'react-native';
- import { AdMobBanner } from 'react-native-admob';
- import Icon from 'react-native-vector-icons/Ionicons';
 
- var adUnitID = "ca-app-pub-4084869608143524/6481055554";
+ var adUnitID = "ca-app-pub-4084869608143524/7020355417";
 
  if(Platform.OS === "ios"){
-   adUnitID = "ca-app-pub-4084869608143524/8195314673";
+   adUnitID = "ca-app-pub-4084869608143524/4066889011";
  }
 
-class admob extends Component {
+class Admob extends Component {
   constructor(props){
     super(props);
     this.state = {
       closeBtn: true
     };
-  }
-
-  static defaultProps = {
-  }
-
-  static propTypes = {
   }
 
   componentDidMount(){}
@@ -43,21 +31,28 @@ class admob extends Component {
     var self = this;
     return(
       <View style={styles.container}>
-        <AdMobBanner
-          bannerSize="banner"
-          adUnitID={adUnitID}
-          didFailToReceiveAdWithError={(e)=>{
-            console.log("banner error", e);
-          }} />
+        <Banner
+          size={"BANNER"}
+          unitId={adUnitID}
+          request={request.build()}
+          onAdLoaded={() => {
+            console.log('Advert loaded');
+          }}
+          onAdFailedToLoad={(e) => {
+            console.log(e.message);
+          }
+
+          }
+           />
       </View>
     );
   }
 }
-  const styles = StyleSheet.create({
-    container:{
-      flex:1,
-      justifyContent:"center",
-      alignItems:"center"
-    }
-  });
-module.exports = admob;
+const styles = StyleSheet.create({
+  container:{
+    flex:1,
+    justifyContent:"center",
+    alignItems:"center"
+  }
+});
+module.exports = Admob;

@@ -44,6 +44,17 @@
 		3D99835420DF79DE00E35FA8 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D99835320DF79DD00E35FA8 /* libReact.a */; };
 		3DC00E442110B1CC00B3A5E9 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DC00E422110B1B900B3A5E9 /* libRNImagePicker.a */; };
 		3DC00E582110BEC800B3A5E9 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DC00E572110BEC800B3A5E9 /* FontAwesome.ttf */; };
+		3DC34B5F21384F550042187D /* 60.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC34B2921384F540042187D /* 60.png */; };
+		3DC34B6021384F550042187D /* 180.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC34B5621384F540042187D /* 180.png */; };
+		3DC34B6121384F550042187D /* 57.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC34B5721384F540042187D /* 57.png */; };
+		3DC34B6221384F550042187D /* 120.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC34B5821384F540042187D /* 120.png */; };
+		3DC34B6321384F550042187D /* 29.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC34B5921384F540042187D /* 29.png */; };
+		3DC34B6421384F550042187D /* 40.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC34B5A21384F550042187D /* 40.png */; };
+		3DC34B6521384F550042187D /* 114.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC34B5B21384F550042187D /* 114.png */; };
+		3DC34B6621384F550042187D /* 58.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC34B5C21384F550042187D /* 58.png */; };
+		3DC34B6721384F550042187D /* 80.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC34B5D21384F550042187D /* 80.png */; };
+		3DC34B6821384F550042187D /* 87.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC34B5E21384F550042187D /* 87.png */; };
+		3DC34B6A213852620042187D /* 1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DC34B69213852620042187D /* 1024.png */; };
 		3DEF734921245CA700D570E0 /* FirebaseInstanceID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DEF734221245CA600D570E0 /* FirebaseInstanceID.framework */; };
 		3DEF734A21245CA700D570E0 /* nanopb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DEF734321245CA600D570E0 /* nanopb.framework */; };
 		3DEF734B21245CA700D570E0 /* GoogleToolboxForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DEF734421245CA600D570E0 /* GoogleToolboxForMac.framework */; };
@@ -423,6 +434,17 @@
 		3D99835320DF79DD00E35FA8 /* libReact.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libReact.a; path = "../../../../../../Users/ducphan/Library/Developer/Xcode/DerivedData/bumbuddy-hgbrqioihwljobcpimjnjzpsivms/Build/Products/Debug-iphoneos/libReact.a"; sourceTree = "<group>"; };
 		3DC00E152110B1B900B3A5E9 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
 		3DC00E572110BEC800B3A5E9 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		3DC34B2921384F540042187D /* 60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 60.png; path = images/60.png; sourceTree = "<group>"; };
+		3DC34B5621384F540042187D /* 180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 180.png; path = images/180.png; sourceTree = "<group>"; };
+		3DC34B5721384F540042187D /* 57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 57.png; path = images/57.png; sourceTree = "<group>"; };
+		3DC34B5821384F540042187D /* 120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 120.png; path = images/120.png; sourceTree = "<group>"; };
+		3DC34B5921384F540042187D /* 29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 29.png; path = images/29.png; sourceTree = "<group>"; };
+		3DC34B5A21384F550042187D /* 40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 40.png; path = images/40.png; sourceTree = "<group>"; };
+		3DC34B5B21384F550042187D /* 114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 114.png; path = images/114.png; sourceTree = "<group>"; };
+		3DC34B5C21384F550042187D /* 58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 58.png; path = images/58.png; sourceTree = "<group>"; };
+		3DC34B5D21384F550042187D /* 80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 80.png; path = images/80.png; sourceTree = "<group>"; };
+		3DC34B5E21384F550042187D /* 87.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 87.png; path = images/87.png; sourceTree = "<group>"; };
+		3DC34B69213852620042187D /* 1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 1024.png; path = images/1024.png; sourceTree = "<group>"; };
 		3DEF734221245CA600D570E0 /* FirebaseInstanceID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseInstanceID.framework; path = Firebase/FirebaseInstanceID.framework; sourceTree = "<group>"; };
 		3DEF734321245CA600D570E0 /* nanopb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = nanopb.framework; path = Firebase/nanopb.framework; sourceTree = "<group>"; };
 		3DEF734421245CA600D570E0 /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleToolboxForMac.framework; path = Firebase/GoogleToolboxForMac.framework; sourceTree = "<group>"; };
@@ -604,6 +626,17 @@
 				3DEF735021245CB000D570E0 /* Firebase.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				3DC34B5921384F540042187D /* 29.png */,
+				3DC34B5A21384F550042187D /* 40.png */,
+				3DC34B69213852620042187D /* 1024.png */,
+				3DC34B5721384F540042187D /* 57.png */,
+				3DC34B5C21384F550042187D /* 58.png */,
+				3DC34B2921384F540042187D /* 60.png */,
+				3DC34B5D21384F550042187D /* 80.png */,
+				3DC34B5E21384F550042187D /* 87.png */,
+				3DC34B5B21384F550042187D /* 114.png */,
+				3DC34B5821384F540042187D /* 120.png */,
+				3DC34B5621384F540042187D /* 180.png */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -1315,9 +1348,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DC34B6621384F550042187D /* 58.png in Resources */,
+				3DC34B6721384F550042187D /* 80.png in Resources */,
+				3DC34B6A213852620042187D /* 1024.png in Resources */,
+				3DC34B6521384F550042187D /* 114.png in Resources */,
+				3DC34B6421384F550042187D /* 40.png in Resources */,
+				3DC34B6321384F550042187D /* 29.png in Resources */,
+				3DC34B6821384F550042187D /* 87.png in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				3DC34B5F21384F550042187D /* 60.png in Resources */,
+				3DC34B6021384F550042187D /* 180.png in Resources */,
+				3DC34B6221384F550042187D /* 120.png in Resources */,
 				3DC00E582110BEC800B3A5E9 /* FontAwesome.ttf in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				3DC34B6121384F550042187D /* 57.png in Resources */,
 				3D0CBD84210F61EE00E156C0 /* Ionicons.ttf in Resources */,
 				3D0CAC17210A1CD00092CC73 /* GoogleService-Info.plist in Resources */,
 			);

@@ -90,7 +90,7 @@ class Upload {
       ]).then((response) => response.json())
         .then((responseJson) => {
           console.log(responseJson);
-          responseJson.secure_url = "https://res.cloudinary.com/dsthiwwp4/video/upload/e_loop/" + responseJson.public_id + ".gif";
+          responseJson.secure_url = "https://res.cloudinary.com/dsthiwwp4/video/upload/so_0,eo_3/e_loop/" + responseJson.public_id + ".gif";
           return callback(responseJson);
         }).catch((err) => {
         console.log(err);

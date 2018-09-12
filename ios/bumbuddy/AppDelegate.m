@@ -12,6 +12,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <RNGoogleSignin/RNGoogleSignin.h>
 #import <React/RCTRootView.h>
+@import GoogleMobileAds;
 
 @implementation AppDelegate
 
@@ -36,6 +37,7 @@
   [self.window makeKeyAndVisible];
   [[FBSDKApplicationDelegate sharedInstance] application:application
                            didFinishLaunchingWithOptions:launchOptions];
+  [GADMobileAds configureWithApplicationID:@"ca-app-pub-4084869608143524~2094253839"];
   return YES;
 }
 

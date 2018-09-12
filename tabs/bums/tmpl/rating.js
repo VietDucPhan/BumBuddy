@@ -148,7 +148,7 @@ class Rating extends Component {
             <View style={styles.actionRight}>
               <View style={styles.button}>
                 <Icon style={styles.buttonIcon} size={25} name="ios-pulse-outline" color="orange"/>
-                <Text>Rate this bum gun</Text>
+                <Text>Rate this gun</Text>
               </View>
             </View>
           </View>

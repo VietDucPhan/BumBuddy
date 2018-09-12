@@ -139,11 +139,11 @@ class CreateBumForm extends Component {
         name:self.state.bumNameText,
         address:self.state.bumStreetAddressText,
         zipcode:self.state.bumZipCodeText,
-        coordinate:[
-          self.state.draggableMarker.longitude,
-          self.state.draggableMarker.latitude
-        ],
+        coordinate:[],
         token:self.props.screenProps.user.token
+      };
+      if(self.state.imCurrentlyHereButton){
+        bum.coordinate = [self.state.draggableMarker.longitude,self.state.draggableMarker.latitude];
       }
       //console.log('createbumform._onCreateClick',bum);
       BumsModel.createBum(bum,function(result){
@@ -327,11 +327,7 @@ class CreateBumForm extends Component {
 
         <View style={[styles.sessionContainer,{paddingTop:5,paddingBottom:5,marginTop:5,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}]}>
           <Text>I am currently here</Text>
-          {Platform.OS == "ios" ?
-            (<Switch value={this.state.imCurrentlyHereButton} onValueChange={()=>this._imCurrentlyHereOnClick()}/>)
-            :(<Text>click on the map icon</Text>)
-          }
-
+          <Switch value={this.state.imCurrentlyHereButton} onValueChange={()=>this._imCurrentlyHereOnClick()}/>
         </View>
       </ScrollView>
     );

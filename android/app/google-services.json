@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "315634877630-441s9nged81q4vfmqoublmt7poarrtvn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bumbuddy",
+            "certificate_hash": "1d6397f1cf1fcb2922518e6e71116b995474f483"
+          }
+        },
+        {
+          "client_id": "315634877630-bugbdijpojm0pmn8nmf0am3t98tsqltl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bumbuddy",
+            "certificate_hash": "25c08b7d9231a024c0314999fbbfe96a86c247bd"
+          }
+        },
+        {
           "client_id": "315634877630-db2l7nu30c58hijkni5hg15o1lbf449d.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -43,7 +59,8 @@
         "ads_service": {
           "status": 1
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-4084869608143524~8800097139"
     },
     {
       "client_info": {

@@ -26,7 +26,7 @@ import DateFormat from '../bums/tmpl/formatdate';
 import Votebtn from './tmpl/votebtn';
 import Morebtn from './tmpl/morebtn';
 import RatingView from '../bums/tmpl/rating';
-//import Admob from '../../commons/admob';
+import Admob from '../../commons/admob';
 
 var BumModel = new BumsLib();
 var Auth = new AuthLib();
@@ -244,27 +244,33 @@ class comments extends Component {
           //style={styles.sectionContainer}
           //ref={(ref) => { self.list = ref; }}
           stickySectionHeadersEnabled={false}
-          renderSectionHeader={()=>{
-            if(self.props._id){
-              return(
-                <View style={styles.bumDetailInfoContainer}>
-
-                  <RatingView navigation={self.props.navigation} _onRefresh={self._onRefresh.bind(this)} _user={self.props.screenProps.user} refreshing={self.state.refreshing} showButton={true} showRating={true} _id={self.props._id} />
-                </View>
-              );
-            }
-          }}
           renderSectionFooter={({section}) => {
             //console.log("",section);
             return(<Button title="Load More" onPress={()=>{
               self.onEndReached();
             }}/>);
           }}
+          refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh.bind(this)}
+              />
+          }
           keyExtractor={(item,index)=>item._id}
           initialNumToRender={5}
           onEndReached={self.onEndReached.bind(this)}
           onEndReachedThreshold={0.5}
           extraData={self.state.comments}
+          renderSectionHeader={()=>{
+            if(self.props._id){
+              return(
+                <View style={styles.bumDetailInfoContainer}>
+                  <Admob/>
+                  <RatingView navigation={self.props.navigation} _onRefresh={self._onRefresh.bind(this)} _user={self.props.screenProps.user} refreshing={self.state.refreshing} showButton={true} showRating={true} _id={self.props._id} />
+                </View>
+              );
+            }
+          }}
           renderItem={(info)=>{
             var obj = info.item;
             switch (obj.bum_rating) {
@@ -353,13 +359,6 @@ class comments extends Component {
                   );
                 }
           }}
-
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.refreshing}
-                onRefresh={this._onRefresh.bind(this)}
-              />
-            }
           />
         </View>
       );
