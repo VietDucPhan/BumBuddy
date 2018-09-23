@@ -95,51 +95,59 @@ class notifications extends Component {
   render() {
     const {state} = this.props.navigation;
     var self = this;
+    var notificationList = [];
+    notificationList.push(
+      <View style={styles.notificationContainer}>
+        <TouchableOpacity>
+          <View style={[styles.notificationContentConatiner]}>
+            <View style={styles.noNotificationContent}>
+              <Text style={styles.noNotificationText}>No notification</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+    if(self.state.notifications.length > 0){
+      notificationList = [];
+      
+      self.state.notifications.map(function(obj, i){
+        if(obj && obj.from && obj.from.profile_picture){
+          notificationList.push(
+            <View style={styles.notificationContainer}>
+              <TouchableOpacity onPress={()=>self.navigateToUserProfile(obj.from._id,obj.from.username)}>
+                <View style={styles.notificationProfileContainer}>
+                  <Image source={{uri: obj.from.profile_picture.secure_url}}
+             style={{width: 40, height: 40, borderRadius:20}} />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={()=>self.navigateToComment(obj.onID)}>
+                <View style={[styles.notificationContentConatiner]}>
+                  <View style={styles.notificationContent}><Text>{obj.body}</Text></View>
+                </View>
+              </TouchableOpacity>
+            </View>
+          );
+        }
+      })
+    }
     if(this.props.screenProps.user == null){
       return (
         <LoginView signOut={self.props.screenProps.signOut} signIn={self.props.screenProps.signIn}/>
       )
     } else {
-      if(self.state.showActivitiIndicator){
-        return(
-          <View style={styles.container}>
-            <ActivityIndicator animating={self.state.showActivitiIndicator}></ActivityIndicator>
-          </View>
-        );
-      } else {
-        return(
-          <ScrollView
-          style={styles.container}
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.refreshing}
-                onRefresh={this._onRefresh.bind(this)}
-              />
-            }
-          >
-          {self.state.notifications.map(function(obj, i){
-            if(obj && obj.from && obj.from.profile_picture){
-              return(
-                  <View style={styles.notificationContainer}>
-                    <TouchableOpacity onPress={()=>self.navigateToUserProfile(obj.from._id,obj.from.username)}>
-                      <View style={styles.notificationProfileContainer}>
-                        <Image source={{uri: obj.from.profile_picture.secure_url}}
-                   style={{width: 40, height: 40, borderRadius:20}} />
-                      </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>self.navigateToComment(obj.onID)}>
-                      <View style={[styles.notificationContentConatiner]}>
-                        <View style={styles.notificationContent}><Text>{obj.body}</Text></View>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-              );
-            }
-          })
-        }
-          </ScrollView>
-        );
-      }
+      return(
+        <ScrollView
+        style={styles.container}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          }
+        >
+        {notificationList}
+        </ScrollView>
+      );
     }
   }
 }
@@ -154,17 +162,24 @@ class notifications extends Component {
 
     },
     notificationProfileContainer:{
-      backgroundColor:"#fff",
+      backgroundColor: "#fff",
       padding:5,
 
     },
     notificationContentConatiner:{
       flex:1,
       justifyContent: 'center',
-
     },
     notificationContent:{
       flexDirection: 'row'
+    },
+    noNotificationContent:{
+      flex:1
+    },
+    noNotificationText:{
+      flex:1,
+      textAlign: 'center',
+      width: Dimensions.get('window').width
     }
   });
 module.exports = notifications;
