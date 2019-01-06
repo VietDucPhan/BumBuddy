@@ -43,7 +43,8 @@ class comments extends Component {
       skip:SKIP,
       limit:LIMIT,
       infiniteLoading:true,
-      bottomRefreshing:false
+      bottomRefreshing:false,
+      bottomLoadingTextIndicator:"Loading..."
     };
   }
 
@@ -51,19 +52,31 @@ class comments extends Component {
     finsihedRefreshing:function(){}
   }
 
-  static navigationOptions = {
-    tabBarLabel: '',
-    tabBarIcon: ({ tintColor, focused }) => (
-      <Icon style={{paddingTop:5, paddingBottom:5}} size={30} name={focused ? 'ios-chatbubbles' : 'ios-chatbubbles-outline'} />
-    ),
-    headerTitle:'Comments',
-    title:'Comments'
+  static navigationOptions =({ navigation }) => {
+    return {
+      tabBarLabel: '',
+      tabBarIcon: ({ tintColor, focused }) => (
+        <Icon style={{paddingTop:5, paddingBottom:5}} size={30} name={focused ? 'ios-chatbubbles' : 'ios-chatbubbles-outline'} />
+      ),
+      headerTitle:'Comments',
+      title:'Comments',
+      tabBarOnPress: ({scene, jumpToIndex}) => {
+        const { route, index, focused} = scene;
+        if(focused){
+          navigation.state.params.scrollToTop();
+        }
+        jumpToIndex(index);
+      }
+    }
   };
 
   componentDidMount(){
     //console.log("comments.componentDidMount");
     var self = this;
     //console.log("comments.componentDidMount");
+    this.props.navigation.setParams({
+      scrollToTop: self.scrollToTop.bind(this)
+    })
     self.setState({skip:0,limit:5});
     var cacheName = "_getBumsComments";
     if(self.props.commentID){
@@ -83,8 +96,7 @@ class comments extends Component {
             refreshing:false
           });
         } else {
-
-          self._getBumsComments();
+          self._onRefresh();
         }
       });
     }
@@ -95,19 +107,14 @@ class comments extends Component {
     return {height:height,width:dimensionWidth};
   }
 
-  _getBumsComments(){
+  _getBumsComments(skip){
     var self = this;
+    var skip = skip || 0;
     //console.log("_getBumsComments",self.state.skip);
     var data = {
-      skip:self.state.skip,
+      skip:skip,
       limit:self.state.limit
     };
-    if(self.state.refreshing){
-      data = {
-        skip:SKIP,
-        limit:LIMIT
-      }
-    }
     var cacheName = "_getBumsComments";
     if(self.props._id){
       data.bum_id = self.props._id;
@@ -116,8 +123,13 @@ class comments extends Component {
       data.user_id = self.props.user_id;
       cacheName = self.props.user_id;
     }
-
     BumModel.getBumsComments(data,function(result){
+      var comments = {
+        showActivitiIndicator:false,
+        refreshing:false,
+        bottomRefreshing:true,
+        bottomLoadingTextIndicator:"Load more"
+      };
       if(result && result.errors){
         Alert.alert(
           result.errors[0].title,
@@ -129,25 +141,21 @@ class comments extends Component {
         )
       } else {
         //console.log("comments._getBumsComments",result);
-        var comments = {
-          showActivitiIndicator:false,
-          refreshing:false,
-          bottomRefreshing:true
-        };
-
         if(self.state.comments && self.state.comments[0] && result.data[0] && !self.state.refreshing && self.state.infiniteLoading){
           comments.comments = self.state.comments.concat(result.data);
           comments.skip = self.state.skip + self.state.limit;
         } else if(result.data && !result.data[0]){
-          self.setState({infiniteLoading:false});
+          comments.infiniteLoading = false;
+          comments.bottomLoadingTextIndicator = "The End";
         } else {
           comments.comments = result.data;
           comments.skip = self.state.skip + self.state.limit;
         }
-        self.setState(comments);
-        Cache.setComments(cacheName,{data:self.state.comments});
-        self.props.finsihedRefreshing();
+        
       }
+      self.setState(comments);
+      Cache.setComments(cacheName,{data:self.state.comments});
+      self.props.finsihedRefreshing();
     });
   }
 
@@ -182,7 +190,7 @@ class comments extends Component {
   _onRefresh() {
     var self = this;
 
-    self.setState({refreshing: true,skip:SKIP,limit:LIMIT,infiniteLoading:true});
+    self.setState({refreshing: true , skip:0, infiniteLoading:true});
     if(self.props.commentID){
       self._getComment();
     } else {
@@ -215,14 +223,28 @@ class comments extends Component {
     var self = this;
     console.log("onEndReached",self.state.infiniteLoading);
     if(self.state.infiniteLoading && self.state.bottomRefreshing){
-      self.setState({bottomRefreshing:false});
+      self.setState({bottomRefreshing:false, bottomLoadingTextIndicator:"Loading..."});
       setTimeout(function(){
-        self._getBumsComments();
+        self._getBumsComments(self.state.skip);
 
       }, 1500);
 
     }
 
+  }
+
+  scrollToTop(){
+    var self = this;
+    if(self.SectionList){
+      self.SectionList.scrollToLocation({
+        itemIndex:0,
+        sectionIndex:0,
+        viewPosition:0
+      });
+      setTimeout(function(){
+        self._onRefresh();
+      }, 500);
+    }
   }
 
 
@@ -242,18 +264,18 @@ class comments extends Component {
           <SectionList
           sections={[{data:self.state.comments}]}
           //style={styles.sectionContainer}
-          //ref={(ref) => { self.list = ref; }}
+          ref={(ref) => { self.SectionList = ref; }}
           stickySectionHeadersEnabled={false}
           renderSectionFooter={({section}) => {
             //console.log("",section);
-            return(<Button title="Load More" onPress={()=>{
+            return(<Button title={self.state.bottomLoadingTextIndicator} onPress={()=>{
               self.onEndReached();
             }}/>);
           }}
           refreshControl={
               <RefreshControl
-                refreshing={this.state.refreshing}
-                onRefresh={this._onRefresh.bind(this)}
+                refreshing={self.state.refreshing}
+                onRefresh={self._onRefresh.bind(this)}
               />
           }
           keyExtractor={(item,index)=>item._id}

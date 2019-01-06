@@ -228,9 +228,13 @@ class CommentForm extends Component {
 
   launchVideoCamera(){
     var self = this;
+    var videoQuality = 'low';
+    if(Platform.OS === "ios"){
+      videoQuality = 'medium';
+    }
     var options = {
       mediaType:'video',
-      videoQuality:'high',
+      videoQuality: videoQuality,
       durationLimit:3
     };
     ImagePicker.launchCamera(options, (response)  => {
@@ -378,11 +382,11 @@ class CommentForm extends Component {
             {
               name:'Choose from photo library',
               func:self.launchImageLibrary.bind(this)
-            },
-            {
-              name:'Choose from video library',
-              func:self.launchVideoLibrary.bind(this)
             }
+            // {
+            //   name:'Choose from video library',
+            //   func:self.launchVideoLibrary.bind(this)
+            // }
             ]}/>
         <View style={Css.textInputContainer}>
           <TextInput
@@ -430,7 +434,7 @@ class CommentForm extends Component {
         { self.state.ratingThisBum &&
           <View style={[Css.ratingContainers]}>
             <View style={[Css.ratingContainerTop,{alignItems:"center",marginTop:20}]}>
-              <Text>Overall Rating</Text>
+              <Text>General Hygiene</Text>
               <View style={Css.starRatingContainerTop}>
                 {starRating.map(function(obj, i){
 
