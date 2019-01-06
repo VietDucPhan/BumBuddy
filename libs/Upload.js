@@ -30,9 +30,6 @@ class Upload {
   **/
   imageUploadToCloud(mediaData,callback){
     var self = this;
-    var timestamp = Date.now();
-    var key = "timestamp=" + timestamp + '7YWoy9IjOttmpg7pNm-ejOjIg-s';
-    var signature = Sha1.hash(key);
     //console.log("upload.imageUploadToCloud",mediaData);
     fetch('https://api.cloudinary.com/v1_1/dsthiwwp4/image/upload', {
       method: 'POST',
@@ -42,9 +39,7 @@ class Upload {
       },
       body: JSON.stringify({
         file: mediaData.uri,
-        api_key: '955818184181287',
-        timestamp:timestamp,
-        signature:signature
+        upload_preset: "noryv4a6"
       })
     }).then((response) => response.json())
       .then((responseJson) => {
@@ -69,8 +64,6 @@ class Upload {
 
   async videoUploadToCloud(mediaData,callback){
     var self = this;
-    var timestamp = Date.now();
-    var signature = Sha1.hash("timestamp=" + timestamp + self.appendix_key);
     var uriArr = mediaData.uri.split("/");
     var lastIndex = uriArr.length - 1;
 
@@ -84,9 +77,7 @@ class Upload {
       },
       [
         {name: 'file', filename: uriArr[lastIndex], data: RNFetchBlob.wrap(mediaData.uri)},
-        {name: 'api_key', data: self.api_key},
-        {name: 'timestamp', data: timestamp.toString()},
-        {name: 'signature', data: signature}
+        {name: 'upload_preset', data: 'noryv4a6'}
       ]).then((response) => response.json())
         .then((responseJson) => {
           console.log(responseJson);
@@ -127,9 +118,6 @@ class Upload {
 
   uploadProfilePictureUsingUrl(url,public_id,callback){
     var self = this;
-    var timestamp = Date.now();
-    var key = 'public_id='+public_id+'&timestamp=' + timestamp + '7YWoy9IjOttmpg7pNm-ejOjIg-s';
-    var signature = Sha1.hash(key);
     //console.log("upload.imageUploadToCloud",mediaData);
     fetch('https://api.cloudinary.com/v1_1/dsthiwwp4/image/upload', {
       method: 'POST',
@@ -139,9 +127,7 @@ class Upload {
       },
       body: JSON.stringify({
         file: url,
-        api_key: '955818184181287',
-        timestamp:timestamp,
-        signature:signature,
+        upload_preset: "noryv4a6",
         public_id:public_id
       })
     }).then((response) => response.json())
