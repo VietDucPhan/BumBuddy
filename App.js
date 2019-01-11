@@ -32,6 +32,7 @@ import SearchStack from './tabs/search/search';
 import SettingsStack from './tabs/profile/tmpl/settings';
 import CommentStack from './tabs/comment/comment';
 import UserDetailStack from './tabs/profile/tmpl/userdetail';
+import WebViewStack from './commons/webview';
 
 
 const tabBarOptions = {
@@ -78,7 +79,8 @@ const stackMangement = {
   ProfileStack : { screen: ProfileTab },
   SettingsStack:{ screen:SettingsStack },
   CommentStack:{screen:CommentStack},
-  UserDetailStack:{screen:UserDetailStack}
+  UserDetailStack:{screen:UserDetailStack},
+  WebViewStack:{screen:WebViewStack}
 }
 const StackPage = StackNavigator(stackMangement);
 

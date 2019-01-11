@@ -47,6 +47,7 @@ class CommentForm extends Component {
       ratingThisBum:false,
       overall_rating:0,
       showActivitiIndicator:false,
+      activityIndicatorName:'loading',
       showModalMenu:false,
       videoSource:null
     }
@@ -79,7 +80,8 @@ class CommentForm extends Component {
 
     if(!self.state.showActivitiIndicator){
       self.setState({
-        showActivitiIndicator:true
+        showActivitiIndicator:true,
+        activityIndicatorName:'posting'
       });
       var inputText = self.state.inputText;
       var imageSource = self.state.imageSource;
@@ -366,7 +368,7 @@ class CommentForm extends Component {
     }();
     return(
       <ScrollView style={Css.container}>
-        <Loading close={self.toogleActivityIndicator.bind(this)} visible={this.state.showActivitiIndicator} />
+        <Loading name={self.state.activityIndicatorName} close={self.toogleActivityIndicator.bind(this)} visible={this.state.showActivitiIndicator} />
         <ModalMenu
           toggleModal={self.toggleCameraMenu.bind(this)}
           visible={self.state.showModalMenu}
@@ -380,7 +382,7 @@ class CommentForm extends Component {
               func:self.launchVideoCamera.bind(this)
             },
             {
-              name:'Choose from photo library',
+              name:'Choose from library',
               func:self.launchImageLibrary.bind(this)
             }
             // {

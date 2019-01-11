@@ -37,7 +37,7 @@ class loading extends Component {
     close:function(){
     },
     loadingAnimation: PropTypes.bool.isRequired,
-    name: PropTypes.oneOf(['loading', 'done',"error"])
+    name: PropTypes.oneOf(['loading', 'posting', 'done',"error"])
   }
 
   componentDidMount(){}
@@ -55,6 +55,14 @@ class loading extends Component {
           <View style={Css.middleBox}>
             <ActivityIndicator animating={true}/>
             <Text style={Css.message}>Loading</Text>
+          </View>
+        );
+        break;
+      case "posting":
+        return(
+          <View style={Css.middleBox}>
+            <ActivityIndicator animating={true}/>
+            <Text style={Css.message}>Posting</Text>
           </View>
         );
         break;

@@ -17,8 +17,31 @@ import {
   Image
  } from 'react-native';
 import AuthLib from '../../libs/Auth';
+import Css from '../../libs/Css';
+import Config from '../../libs/Config';
 import LoginView from './tmpl/login';
 import Icon from 'react-native-vector-icons/Ionicons';
+import firebase from 'react-native-firebase';
+
+var adUnitID = Config.androidAdRewardUnitID;
+if(Platform.OS === "ios"){
+  adUnitID = Config.iosAdrewardUnitID;
+}
+
+const Advert = firebase.admob().rewarded(adUnitID);
+const AdRequest = firebase.admob.AdRequest;
+const request = new AdRequest();
+
+Advert.loadAd(request.build());
+Advert.on('onAdLoaded', () => {
+  console.log('Advert ready to show.');
+});
+
+Advert.on('onRewarded', (event) => {
+  console.log('The user watched the entire video and will now be rewarded!', event);
+});
+
+
 var Auth = new AuthLib();
 
 class profile extends Component {
@@ -52,6 +75,15 @@ class profile extends Component {
 
   componentDidMount(){
   }
+
+  _watchRewardAd(){
+    console.log('Ad reward');
+    if (Advert.isLoaded()) {
+      Advert.show();
+    } else {
+      console.log('Ad reward skip');
+    }
+  }
   //
   render() {
     var self = this;
@@ -64,7 +96,7 @@ class profile extends Component {
     } else {
       return (
           <ScrollView style={{backgroundColor:"#e8e8e8"}}>
-            <View style={styles.profileContainer}>
+            <View style={Css.profileContainer}>
               <View>
               {
                 this.props.screenProps.user.profile_picture && this.props.screenProps.user.profile_picture.width && this.props.screenProps.user.profile_picture.height &&
@@ -73,13 +105,13 @@ class profile extends Component {
               }
               </View>
 
-              <View style={styles.profileName}>
+              <View style={Css.profileName}>
                 <Text>{this.props.screenProps.user.username}</Text>
               </View>
 
             </View>
-            <View style={styles.profileNavigatorContainer}>
-              <TouchableOpacity  onPress={()=>navigate("UserDetailStack",{user_id:self.props.screenProps.user._id,username:self.props.screenProps.user.username})} style={[styles.profileButtonNavigator,styles.profileButtonNavigatorLastChild]} >
+            <View style={Css.profileNavigatorContainer}>
+              <TouchableOpacity  onPress={()=>navigate("UserDetailStack",{user_id:self.props.screenProps.user._id,username:self.props.screenProps.user.username})} style={[Css.profileButtonNavigator,Css.profileButtonNavigatorLastChild]} >
                 <Text>Comments</Text>
                 <Icon size={20} name="ios-arrow-forward" backgroundColor="#4267b2"/>
               </TouchableOpacity>
@@ -87,33 +119,40 @@ class profile extends Component {
             </View>
 
 
-            <View style={styles.profileNavigatorContainer}>
-              <TouchableOpacity style={styles.profileButtonNavigator} >
+            <View style={Css.profileNavigatorContainer}>
+              <TouchableOpacity  onPress={()=>self.props.navigation.navigate("WebViewStack",{uri:"https://www.bumbuddy.app/privacy"})} style={Css.profileButtonNavigator} >
                 <Text>Privacy Policy</Text>
                 <Icon size={20} name="ios-arrow-forward" backgroundColor="#4267b2"/>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.profileButtonNavigator} >
+              <TouchableOpacity onPress={()=>self.props.navigation.navigate("WebViewStack",{uri:"https://www.bumbuddy.app/terms"})} style={Css.profileButtonNavigator} >
                 <Text>Terms</Text>
                 <Icon size={20} name="ios-arrow-forward" backgroundColor="#4267b2"/>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.profileButtonNavigator,styles.profileButtonNavigatorLastChild]} >
+              <TouchableOpacity onPress={()=>self.props.navigation.navigate("WebViewStack",{uri:"https://www.bumbuddy.app/open-source-libraries"})} style={[Css.profileButtonNavigator,Css.profileButtonNavigatorLastChild]} >
                 <Text>Open Sources Libraries</Text>
                 <Icon size={20} name="ios-arrow-forward" backgroundColor="#4267b2"/>
               </TouchableOpacity>
             </View>
-
-
-            <View style={styles.profileNavigatorContainer}>
-              <TouchableOpacity onPress={()=>this.props.navigation.navigate("SettingsStack")} style={[styles.profileButtonNavigator,styles.profileButtonNavigatorLastChild]} >
+            
+            <View style={Css.profileNavigatorContainer}>
+              <TouchableOpacity onPress={()=>this.props.navigation.navigate("SettingsStack")} style={[Css.profileButtonNavigator]} >
                 <Text>Settings</Text>
+                <Icon size={20} name="ios-arrow-forward" backgroundColor="#4267b2"/>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={()=>self.props.navigation.navigate("WebViewStack",{uri:"https://www.bumbuddy.app/feedback"})} style={[Css.profileButtonNavigator,Css.profileButtonNavigatorLastChild]} >
+                <Text>Feedback</Text>
+                <Icon size={20} name="ios-arrow-forward" backgroundColor="#4267b2"/>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={()=>{self._watchRewardAd()}} style={[Css.profileButtonNavigator]} >
+                <Text>Support us (Ads)</Text>
                 <Icon size={20} name="ios-arrow-forward" backgroundColor="#4267b2"/>
               </TouchableOpacity>
             </View>
 
-            <View style={styles.profileNavigatorContainer}>
+            <View style={Css.profileNavigatorContainer}>
               <TouchableOpacity
                 onPress={() => this.props.screenProps.signOut()}
-                style={[styles.profileButtonNavigator,styles.profileButtonNavigatorLastChild]} >
+                style={[Css.profileButtonNavigator,Css.profileButtonNavigatorLastChild]} >
                 <Text>Sign Out</Text>
                 <Icon size={20} name="ios-log-out" backgroundColor="#4267b2"/>
               </TouchableOpacity>
@@ -123,41 +162,4 @@ class profile extends Component {
     }
   }
 }
-  const styles = StyleSheet.create({
-    profileContainer:{
-      flex:1,
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor:"#fff",
-      paddingBottom:15
-    },
-    profileNavigatorContainer:{
-      borderTopWidth: StyleSheet.hairlineWidth,
-      borderBottomWidth: StyleSheet.hairlineWidth,
-      borderColor: '#ccc',
-      marginTop:10,
-      paddingTop:10,
-      paddingLeft:5,
-      paddingRight:5,
-      backgroundColor:"#fff"
-    },
-    profileName:{
-      marginTop:10
-    },
-    profileButtonNavigator:{
-      marginBottom:10,
-      flexDirection: 'row',
-      padding:5,
-      //flex:1,
-      //justifyContent:'flex-end',
-      justifyContent: 'space-between',
-      //backgroundColor:'#000'
-      borderBottomWidth: StyleSheet.hairlineWidth,
-      borderColor: '#ccc'
-    },
-    profileButtonNavigatorLastChild:{
-      borderBottomWidth:0
-    }
-  });
 module.exports = profile;

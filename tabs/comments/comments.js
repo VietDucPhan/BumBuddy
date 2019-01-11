@@ -22,6 +22,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import AuthLib from '../../libs/Auth';
 import BumsLib from '../../libs/Bums';
 import CacheLib from '../../libs/Cache';
+import Css from '../../libs/Css';
 import DateFormat from '../bums/tmpl/formatdate';
 import Votebtn from './tmpl/votebtn';
 import Morebtn from './tmpl/morebtn';
@@ -254,7 +255,7 @@ class comments extends Component {
     //console.log("comments.render",self.state.comments);
     if(self.state.showActivitiIndicator){
       return(
-        <View style={styles.container}>
+        <View style={Css.container}>
           <ActivityIndicator animating={self.state.showActivitiIndicator}></ActivityIndicator>
         </View>
       );
@@ -286,14 +287,14 @@ class comments extends Component {
           renderSectionHeader={()=>{
             if(self.props._id){
               return(
-                <View style={styles.bumDetailInfoContainer}>
-                  <Admob/>
+                <View style={Css.bumDetailInfoContainer}>
+                  <Admob size="SMART_BANNER" style={{marginBottom:5}}/>
                   <RatingView navigation={self.props.navigation} _onRefresh={self._onRefresh.bind(this)} _user={self.props.screenProps.user} refreshing={self.state.refreshing} showButton={true} showRating={true} _id={self.props._id} />
                 </View>
               );
             }
           }}
-          renderItem={(info)=>{
+          renderItem={(info, index)=>{
             var obj = info.item;
             switch (obj.bum_rating) {
                   case "level1":
@@ -320,29 +321,29 @@ class comments extends Component {
 
                 if(obj && obj._id && obj.created_by){
                   return (
-                    <View key={obj._id} style={styles.commentContainer}>
-                      <View style={styles.commentHeader}>
-                        <View style={styles.commentorProfilePictureContainer}>
+                    <View key={index} style={Css.commentContainer}>
+                      <View style={Css.commentHeader}>
+                        <View style={Css.commentorProfilePictureContainer}>
                           <Image source={{uri: obj.created_by.profile_picture.secure_url}}
                      style={{width: 30, height: 30, borderRadius:15}} />
 
                         </View>
-                        <View style={styles.commentorProfileInfoContainer}>
+                        <View style={Css.commentorProfileInfoContainer}>
                           <View>
                             {obj.created_by
                               ?
                               <TouchableOpacity onPress={()=>navigate("UserDetailStack",{user_id:obj.created_by._id,username:obj.created_by.username})}>
-                                <Text style={styles.createdBy}>{obj.created_by.username}</Text>
+                                <Text style={Css.createdBy}>{obj.created_by.username}</Text>
                               </TouchableOpacity>
                               :
-                                <Text style={styles.commentAtPlace}></Text>
+                                <Text style={Css.commentAtPlace}></Text>
                             }
                             {self.props._id
                               ?
-                                <DateFormat style={styles.commentAtPlace} created_date={obj.created_date}/>
+                                <DateFormat style={Css.commentAtPlace} created_date={obj.created_date}/>
                               :
                               <TouchableOpacity onPress={()=>navigate("BumDetail",{_id:obj.bum_id})}>
-                                <Text style={styles.commentAtPlace}>{obj.name}</Text>
+                                <Text style={Css.commentAtPlace}>{obj.name}</Text>
                               </TouchableOpacity>
                             }
 
@@ -356,16 +357,16 @@ class comments extends Component {
                    style={self._calculateImageHeight(obj.media[0].width,Dimensions.get('window').width,obj.media[0].height)} />}
 
                       </View>
-                      <View style={styles.commentorCommentContainer}>
+                      <View style={Css.commentorCommentContainer}>
                         <View>
                           <Text>{obj.description}</Text>
                         </View>
-                         <View style={styles.commentPointsAndResponseContainer}>
+                         <View style={Css.commentPointsAndResponseContainer}>
                            <Votebtn navigation={self.props.navigation} _user={self.props.screenProps.user} _id={obj._id} _upVote={obj.upVote} _downVote={obj.downVote} />
-                           <View style={styles.commentPointsResponseAndRatingContainer}>
-                              <Text style={styles.commentPointsAndResponseText}>{obj.overall_rating_displayname} {obj.overall_rating_displayname && <Text>-</Text>} {obj.bum_rating}</Text>
+                           <View style={Css.commentPointsResponseAndRatingContainer}>
+                              <Text style={Css.commentPointsAndResponseText}>{obj.overall_rating_displayname} {obj.overall_rating_displayname && <Text>-</Text>} {obj.bum_rating}</Text>
 
-                              <Text style={styles.commentPointsAndResponseText}>{obj.points} points</Text>
+                              <Text style={Css.commentPointsAndResponseText}>{obj.points} points</Text>
 
                            </View>
 
@@ -373,10 +374,18 @@ class comments extends Component {
                       </View>
                     </View>
                   );
+                } else if(obj.admob){
+                  return(
+                    <View key={index} style={Css.commentContainer}>
+                      <View style={Css.commentorProfileInfoContainer}>
+                        <Admob size={obj.size}/>
+                      </View>
+                    </View>
+                  );
                 } else {
                   return(
-                    <View style={styles.beTheFirstContainer}>
-                      <Text style={styles.beTheFirstContainerText}>Be the first to comment</Text>
+                    <View style={Css.beTheFirstContainer}>
+                      <Text style={Css.beTheFirstContainerText}>Be the first to comment</Text>
                     </View>
                   );
                 }
@@ -388,83 +397,4 @@ class comments extends Component {
 
   }
 }
-  const styles = StyleSheet.create({
-    commentContainer:{
-      flex:1,
-      flexDirection: 'column',
-      backgroundColor:"#fff",
-      marginBottom:5
-    },
-    commentHeader:{
-      flex:1,
-      flexDirection: 'row',
-      backgroundColor:"#fff",
-
-    },
-    commentorProfilePictureContainer:{
-      backgroundColor:"#fff",
-      padding:5
-    },
-    commentorProfileInfoContainer:{
-      flex:1,
-      flexDirection: 'row',
-      alignItems:'center',
-      justifyContent: 'space-between',
-      backgroundColor:"#fff",
-      padding:5
-    },
-    createdBy:{
-      fontWeight:"500"
-    },
-    commentAtPlace:{
-      fontSize:12
-    },
-    commentorCommentContainer:{
-      flex:1,
-      backgroundColor:"#fff",
-      padding:10
-    },
-    commentPointsAndResponseContainer:{
-      flexDirection:'row',
-      alignItems:'center',
-      justifyContent:'space-between',
-      paddingTop:5,
-      paddingBottom:5
-    },
-    commentPointsAndResponseButtonsContainer:{
-      flex:1,
-      flexDirection:'row',
-      alignItems:'center',
-    },
-    commentPointsResponseAndRatingContainer:{
-      flexDirection:'column'
-    },
-    commentPointsAndResponseButton:{
-      borderWidth:StyleSheet.hairlineWidth,
-      color:'#888',
-      borderColor:'#ccc',
-      paddingTop:5,
-      paddingRight:10,
-      paddingBottom:5,
-      paddingLeft:10,
-      marginRight:5
-    },
-    commentPointsAndResponseText:{
-      color:'#888'
-    },
-    beTheFirstContainer:{
-      alignItems:'center',
-      marginTop:10
-    },
-    beTheFirstContainerText:{
-      color:"#ccc"
-    },
-    bumDetailInfoContainer:{
-      marginBottom:5
-    },
-
-    sectionContainer:{
-      marginBottom:20
-    }
-  });
 module.exports = comments;

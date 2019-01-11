@@ -5,6 +5,7 @@ import android.app.Application;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.CallbackManager;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import com.facebook.react.ReactNativeHost;
@@ -33,6 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
               new MainReactPackage(),
+            new RNCWebViewPackage(),
             new RNFetchBlobPackage(),
               new RNFirebasePackage(),
               new RNGoogleSigninPackage(),

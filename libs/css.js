@@ -109,6 +109,119 @@ const styles = StyleSheet.create({
     padding:5,
     height:150,
     fontSize:18
+  },
+  profileContainer:{
+    flex:1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor:"#fff",
+    paddingBottom:15
+  },
+  profileNavigatorContainer:{
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: '#ccc',
+    marginTop:10,
+    paddingTop:10,
+    paddingLeft:5,
+    paddingRight:5,
+    backgroundColor:"#fff"
+  },
+  profileName:{
+    marginTop:10
+  },
+  profileButtonNavigator:{
+    marginBottom:10,
+    flexDirection: 'row',
+    padding:5,
+    //flex:1,
+    //justifyContent:'flex-end',
+    justifyContent: 'space-between',
+    //backgroundColor:'#000'
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: '#ccc'
+  },
+  profileButtonNavigatorLastChild:{
+    borderBottomWidth:0
+  },
+  commentContainer:{
+    flex:1,
+    flexDirection: 'column',
+    backgroundColor:"#fff",
+    marginBottom:10,
+    borderBottomWidth:StyleSheet.hairlineWidth,
+    borderBottomColor:"#ccc"
+  },
+  commentHeader:{
+    flex:1,
+    flexDirection: 'row',
+    backgroundColor:"#fff",
+
+  },
+  commentorProfilePictureContainer:{
+    backgroundColor:"#fff",
+    padding:5
+  },
+  commentorProfileInfoContainer:{
+    flex:1,
+    flexDirection: 'row',
+    alignItems:'center',
+    justifyContent: 'space-between',
+    backgroundColor:"#fff",
+    padding:5
+  },
+  createdBy:{
+    fontWeight:"500"
+  },
+  commentAtPlace:{
+    fontSize:12
+  },
+  commentorCommentContainer:{
+    flex:1,
+    backgroundColor:"#fff",
+    padding:10
+  },
+  commentPointsAndResponseContainer:{
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between',
+    paddingTop:5,
+    paddingBottom:5
+  },
+  commentPointsAndResponseButtonsContainer:{
+    flex:1,
+    flexDirection:'row',
+    alignItems:'center',
+  },
+  commentPointsResponseAndRatingContainer:{
+    flexDirection:'column'
+  },
+  commentPointsAndResponseButton:{
+    borderWidth:StyleSheet.hairlineWidth,
+    color:'#888',
+    borderColor:'#ccc',
+    paddingTop:5,
+    paddingRight:10,
+    paddingBottom:5,
+    paddingLeft:10,
+    marginRight:5
+  },
+  commentPointsAndResponseText:{
+    color:'#888'
+  },
+  beTheFirstContainer:{
+    alignItems:'center',
+    marginTop:10
+  },
+  beTheFirstContainerText:{
+    color:"#ccc"
+  },
+  bumDetailInfoContainer:{
+    marginBottom:5
+  },
+  sectionContainer:{
+    marginBottom:20
   }
 });
 module.exports = styles;

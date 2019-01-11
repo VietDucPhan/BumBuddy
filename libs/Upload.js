@@ -31,35 +31,34 @@ class Upload {
   imageUploadToCloud(mediaData,callback){
     var self = this;
     //console.log("upload.imageUploadToCloud",mediaData);
-    fetch('https://api.cloudinary.com/v1_1/dsthiwwp4/image/upload', {
-      method: 'POST',
-      headers: {
+    RNFetchBlob.fetch('POST','https://api.cloudinary.com/v1_1/dsthiwwp4/image/upload', 
+      {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'octet-stream',
       },
-      body: JSON.stringify({
-        file: mediaData.uri,
-        upload_preset: "noryv4a6"
-      })
-    }).then((response) => response.json())
-      .then((responseJson) => {
-        return callback(responseJson);
-      })
-      .catch((error) => {
-        console.log("upload.imageUploadToCloud.error",error);
-        return callback({
-          errors:
-          [
-            {
-              status:'m009',
-              source:{pointer:"libs/upload.imageUploadToCloud"},
-              title:"Could not upload image",
-              detail:error.message
-            }
-          ]
-        });
-
+      [
+        {name:"file", data: mediaData.uri},
+        {name:"upload_preset", data:"noryv4a6"}
+      ]
+    )
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return callback(responseJson);
+    })
+    .catch((error) => {
+      console.log("upload.imageUploadToCloud.error",error);
+      return callback({
+        errors:
+        [
+          {
+            status:'m009',
+            source:{pointer:"libs/upload.imageUploadToCloud"},
+            title:"Could not upload image",
+            detail:error.message
+          }
+        ]
       });
+    });
   }
 
   async videoUploadToCloud(mediaData,callback){

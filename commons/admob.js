@@ -4,6 +4,7 @@ import firebase from 'react-native-firebase';
 const Banner = firebase.admob.Banner;
 const AdRequest = firebase.admob.AdRequest;
 const request = new AdRequest();
+import PropTypes from 'prop-types';
 import {
   View,
   StyleSheet,
@@ -24,15 +25,23 @@ class Admob extends Component {
     };
   }
 
-  componentDidMount(){}
+  static defaultProps = {
+    size: 'BANNER',
+    style: {}
+  }
 
+  static propTypes = {
+    size: PropTypes.oneOf(['BANNER', 'SMART_BANNER', 'MEDIUM_RECTANGLE'])
+  }
+
+  componentDidMount(){}
 
   render(){
     var self = this;
     return(
-      <View style={styles.container}>
+      <View style={[styles.container, self.props.style]}>
         <Banner
-          size={"BANNER"}
+          size={self.props.size}
           unitId={adUnitID}
           request={request.build()}
           onAdLoaded={() => {
