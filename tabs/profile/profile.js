@@ -139,11 +139,11 @@ class profile extends Component {
                 <Text>Settings</Text>
                 <Icon size={20} name="ios-arrow-forward" backgroundColor="#4267b2"/>
               </TouchableOpacity>
-              <TouchableOpacity onPress={()=>self.props.navigation.navigate("WebViewStack",{uri:"https://www.bumbuddy.app/feedback"})} style={[Css.profileButtonNavigator,Css.profileButtonNavigatorLastChild]} >
+              <TouchableOpacity onPress={()=>self.props.navigation.navigate("WebViewStack",{uri:"https://www.bumbuddy.app/feedback"})} style={[Css.profileButtonNavigator]} >
                 <Text>Feedback</Text>
                 <Icon size={20} name="ios-arrow-forward" backgroundColor="#4267b2"/>
               </TouchableOpacity>
-              <TouchableOpacity onPress={()=>{self._watchRewardAd()}} style={[Css.profileButtonNavigator]} >
+              <TouchableOpacity onPress={()=>{self._watchRewardAd()}} style={[Css.profileButtonNavigator, Css.profileButtonNavigatorLastChild]} >
                 <Text>Support us (Ads)</Text>
                 <Icon size={20} name="ios-arrow-forward" backgroundColor="#4267b2"/>
               </TouchableOpacity>
