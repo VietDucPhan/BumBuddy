@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
   },
   modalMenuContent:{
     textAlign: 'center',
-    fontSize:20,
-    color:"#0070c9"
+    fontSize:17,
+    color:"rgb(0,122,255)"
 
   },
   container:{

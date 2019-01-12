@@ -269,9 +269,12 @@ class comments extends Component {
           stickySectionHeadersEnabled={false}
           renderSectionFooter={({section}) => {
             //console.log("",section);
-            return(<Button title={self.state.bottomLoadingTextIndicator} onPress={()=>{
-              self.onEndReached();
-            }}/>);
+            if(!self.props.commentID){
+              return(<Button title={self.state.bottomLoadingTextIndicator} onPress={()=>{
+                self.onEndReached();
+              }}/>);
+            }
+            
           }}
           refreshControl={
               <RefreshControl
