@@ -16,6 +16,7 @@ Fetch.apiPOST = function(api, data, callback){
   }
   //console.log('apiPost',data);
   var url = Config.apiPrefix + api;
+  data.version = Config.version;
   fetch(url, {
       method: 'POST',
       headers: {

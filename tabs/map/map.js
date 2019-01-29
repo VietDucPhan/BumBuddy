@@ -233,13 +233,13 @@ class Map extends Component {
 
   _locateBtn(){
     var self = this;
-    if(Platform.OS === 'ios'){
+    // if(Platform.OS === 'ios'){
       return(
         <TouchableOpacity onPress={()=>self._locatorOnPress()} style={styles.locatorOnPressIcon}>
           <Icon style={styles.iconOnLocator} name="ios-locate" size={27} />
         </TouchableOpacity>
       );
-    }
+    // }
   }
   
   render() {
@@ -250,7 +250,7 @@ class Map extends Component {
           style={[styles.mapView]}
           onRegionChangeComplete={this.onRegionChangeComplete.bind(this)}
           showsUserLocation={true}
-          showsMyLocationButton={true}
+          showsMyLocationButton={false}
           showsScale={true}
           showsCompass={false}
           showsPointsOfInterest={false}

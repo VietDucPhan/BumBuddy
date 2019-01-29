@@ -228,7 +228,7 @@ class commentdetail extends Component {
               onChangeText={(text) => this._inputChangeText(text)}
               value={this.state.inputText}
               style={styles.inputText}/>
-              <Button disabled={buttonDisable} color="#2196f3" style={{backgroundColor:"#2196f3"}} onPress={()=>self._postReply()} title="Post"/>
+              <Button disabled={buttonDisable} color="rgb(0,122,255)" style={{backgroundColor:"rgb(0,122,255)"}} onPress={()=>self._postReply()} title="Post"/>
           </View>
         }
 

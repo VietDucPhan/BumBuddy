@@ -254,6 +254,7 @@ class CreateBumForm extends Component {
 
   componentDidMount(){
     var self = this;
+    self._getUserCurrentlocation();
     self.props.navigation.setParams({
       onCreateClick:self._onCreateClick.bind(this)
     });

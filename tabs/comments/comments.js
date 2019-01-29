@@ -67,17 +67,32 @@ class comments extends Component {
           navigation.state.params.scrollToTop();
         }
         jumpToIndex(index);
-      }
+      },
+      headerRight:(
+        <TouchableOpacity onPress={()=>navigation.state.params._onClickHeaderRight()} >
+          <Icon style={{padding:10,marginTop:5}} size={22} name="md-add-circle"/>
+        </TouchableOpacity>
+      )
     }
   };
+
+  _onClickHeaderRight(){
+    var self = this;
+    if(self.props.screenProps.user != null){
+      self.props.navigation.navigate('SearchPage');
+    } else {
+      self.props.navigation.navigate('Profile');
+    }
+  }
 
   componentDidMount(){
     //console.log("comments.componentDidMount");
     var self = this;
     //console.log("comments.componentDidMount");
-    this.props.navigation.setParams({
-      scrollToTop: self.scrollToTop.bind(this)
-    })
+    self.props.navigation.setParams({
+      scrollToTop: self.scrollToTop.bind(this),
+      _onClickHeaderRight:self._onClickHeaderRight.bind(this)
+    });
     self.setState({skip:0,limit:5});
     var cacheName = "_getBumsComments";
     if(self.props.commentID){

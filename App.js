@@ -10,7 +10,8 @@ import {
   StyleSheet,
   Text,
   View,
-  AsyncStorage
+  AsyncStorage,
+  Modal
 } from 'react-native';
 import firebase from 'react-native-firebase';
 import type { Notification, NotificationOpen } from 'react-native-firebase';
@@ -57,11 +58,7 @@ var tabNavigatorOptions = {
   tabBarOptions:tabBarOptions,
   tabBarPosition:'bottom',
   animationEnabled:false,
-  lazy:false
-}
-
-if(Platform.OS === "ios"){
-  tabNavigatorOptions.lazy = true;
+  lazy:true
 }
 
 const Tabs = TabNavigator(
@@ -95,9 +92,10 @@ export default class App extends Component<Props> {
     super(props);
     this.state = {
       isConnected:null,
-      user:null
+      user:null,
+      announcementVisible:true
     };
-    const channel = new firebase.notifications.Android.Channel('bum-buddy', 'Bum Buddy', firebase.notifications.Android.Importance.Max)
+    const channel = new firebase.notifications.Android.Channel('bum-buddy', 'Bum Buddy', firebase.notifications.Android.Importance.High)
       .setDescription('Bum Buddy notification');
 
     // Create the channel
@@ -156,32 +154,32 @@ export default class App extends Component<Props> {
       }
     });
     this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
-        // Process your token as required
-        Cache.getPushToken(function(cacheToken){
-          if(fcmToken && fcmToken != cacheToken){
-            Cache.setPushToken(fcmToken);
-          }
-        });
+      // Process your token as required
+      Cache.getPushToken(function(cacheToken){
+        if(fcmToken && fcmToken != cacheToken){
+          Cache.setPushToken(fcmToken);
+        }
+      });
     });
     this._signIn(function(res){
       
     });
 
     this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
-        // Get the action triggered by the notification being opened
-        const notification: Notification = notificationOpen.notification;
-        //console.log(notification.data.content);
-          if(notification && notification.data && notification.data.content){
-            var data_payload = JSON.parse(notification.data.content);
-            if(data_payload.typeOfNotification == "voted" || data_payload.typeOfNotification == "replied"){
-              //console.log('data_payload.onID',data_payload.onID);
-              if(self.navigator){
-                self.navigator.dispatch(
-                  NavigationActions.navigate({ routeName: "CommentStack", params:{commentID:data_payload.onID} })
-                );
-              }
+      // Get the action triggered by the notification being opened
+      const notification: Notification = notificationOpen.notification;
+      //console.log(notification.data.content);
+        if(notification && notification.data && notification.data.content){
+          var data_payload = JSON.parse(notification.data.content);
+          if(data_payload.typeOfNotification == "voted" || data_payload.typeOfNotification == "replied"){
+            //console.log('data_payload.onID',data_payload.onID);
+            if(self.navigator){
+              self.navigator.dispatch(
+                NavigationActions.navigate({ routeName: "CommentStack", params:{commentID:data_payload.onID} })
+              );
             }
           }
+        }
     });
     this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification: Notification) => {
         // Process your notification as required
@@ -189,29 +187,40 @@ export default class App extends Component<Props> {
     });
     this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
         // listen when app in the foreground
-        if(notification && notification.notificationId){
-          let title = 'Bum Buddy';
-          let body = 'You have a new notification';
-          let id = notification.notificationId;
-          let data = {};
-          if(notification.title){
-            title = notification.title;
+      if(notification && notification.notificationId){
+        let title = 'Bum Buddy';
+        let body = 'You have a new notification';
+        let id = notification.notificationId;
+        let data = {};
+        var setParamsAction = NavigationActions.setParams({
+          key:'Notificiations',
+          params:{
+            isNewNotification:true
           }
+        });
+        self.navigator.dispatch(setParamsAction);
+        //console.log('new notification');
+        if(notification.title){
+          title = notification.title;
+        }
 
-          if(notification.body){
-            body = notification.body;
-          }
+        if(notification.body){
+          body = notification.body;
+        }
 
-          if(notification.data){
-            data = notification.data;
-          }
-          const localNotification = new firebase.notifications.Notification()
-            .android.setChannelId('bum-buddy')
-            .setNotificationId(id)
-            .setTitle(title)
-            .setBody(body)
-            .setData(data);
-          firebase.notifications().displayNotification(localNotification);
+        if(notification.data){
+          data = notification.data;
+        }
+        const localNotification = new firebase.notifications.Notification()
+          .setNotificationId(id)
+          .setTitle(title)
+          .setBody(body)
+          .setData(data)
+          .setSound('default')
+          .android.setChannelId('bum-buddy')
+          .android.setPriority(firebase.notifications.Android.Priority.Max)
+          .android.setVibrate([1000, 1000, 1000]);
+        firebase.notifications().displayNotification(localNotification);
       }
     });
     firebase.notifications().getInitialNotification()
@@ -245,11 +254,11 @@ export default class App extends Component<Props> {
   render() {
     var self = this;
     return (
-        <StackPage ref={nav => { self.navigator = nav; }} screenProps={{
-          user:self.state.user,
-          signIn:self._signIn.bind(this),
-          signOut:self._signOut.bind(this)
-        }} />
-      );
+      <StackPage ref={nav => { self.navigator = nav; }} screenProps={{
+        user:self.state.user,
+        signIn:self._signIn.bind(this),
+        signOut:self._signOut.bind(this)
+      }} />
+    );
   }
 }

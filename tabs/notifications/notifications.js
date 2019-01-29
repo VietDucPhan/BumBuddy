@@ -13,6 +13,7 @@ import {
   RefreshControl,
   ActivityIndicator
  } from 'react-native';
+ import { NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LoginView from '../profile/tmpl/login';
 import BumsLib from '../../libs/Bums';
@@ -31,13 +32,29 @@ class notifications extends Component {
   }
 
   static navigationOptions = ({navigation}) => {
-    console.log('Map.navigationOptions',navigation);
     return {tabBarLabel: 'Notifications',
-    tabBarIcon: ({ tintColor, focused }) => (
-      <Icon style={{paddingTop:5, paddingBottom:5}} size={30} name={focused ? 'ios-notifications' : 'ios-notifications-outline'} />
-    ),
+    tabBarIcon: ({ tintColor, focused }) => {
+      var color = {};
+      if(navigation.state && navigation.state.params && navigation.state.params.isNewNotification){
+        color.color = "rgb(255,59,48)";
+      }
+      return(
+        <Icon style={[{paddingTop:5, paddingBottom:5},color]} size={30} name={focused ? 'ios-notifications' : 'ios-notifications-outline'} />
+      );
+    },
     headerTitle:'Notification',
-    title:'Notification'
+    title:'Notification',
+    tabBarOnPress: ({scene, jumpToIndex}) => {
+        const { route, index, focused} = scene;
+        var setParamsAction = NavigationActions.setParams({
+          key:'Notificiations',
+          params:{
+            isNewNotification:false
+          }
+        });
+        navigation.dispatch(setParamsAction);
+        jumpToIndex(index);
+      }
     }
   }
 
