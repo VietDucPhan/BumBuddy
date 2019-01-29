@@ -17,7 +17,8 @@
     "react-native-image-picker": "0.26.7",
     "react-native-firebase": "4.3.0",
     "rn-fetch-blob": "0.10.12",
-    "react-native-webview": "3.0.0"
+    "react-native-webview": "3.0.0",
+    "react-native-photo-view": "1.5.2"
   },
   "devDependencies": {
     "babel-jest": "23.0.1",

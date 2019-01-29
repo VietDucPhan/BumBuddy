@@ -147,6 +147,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-photo-view')
     compile project(':react-native-webview')
     compile project(':rn-fetch-blob')
     compile project(':react-native-firebase')

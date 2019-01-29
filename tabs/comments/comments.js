@@ -17,7 +17,8 @@ import {
   FlatList,
   SectionList,
   Button
- } from 'react-native';
+} from 'react-native';
+import PhotoView from 'react-native-photo-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AuthLib from '../../libs/Auth';
 import BumsLib from '../../libs/Bums';
@@ -371,8 +372,10 @@ class comments extends Component {
                       </View>
                       <View>
                         {obj.media && obj.media[0] &&
-                          <Image resizeMode="contain" source={{uri: obj.media[0].secure_url}}
-                   style={self._calculateImageHeight(obj.media[0].width,Dimensions.get('window').width,obj.media[0].height)} />}
+                          <Image 
+                            resizeMode="contain" 
+                            source={{uri: obj.media[0].secure_url}}
+                            style={self._calculateImageHeight(obj.media[0].width,Dimensions.get('window').width,obj.media[0].height)} />}
 
                       </View>
                       <View style={Css.commentorCommentContainer}>
