@@ -367,7 +367,7 @@ class CommentForm extends Component {
       }
     }();
     return(
-      <ScrollView style={Css.container}>
+      <View style={Css.container}>
         <Loading name={self.state.activityIndicatorName} close={self.toogleActivityIndicator.bind(this)} visible={this.state.showActivitiIndicator} />
         <ModalMenu
           toggleModal={self.toggleCameraMenu.bind(this)}
@@ -463,7 +463,7 @@ class CommentForm extends Component {
           </View>
         }
 
-      </ScrollView>
+      </View>
     );
   }
 }

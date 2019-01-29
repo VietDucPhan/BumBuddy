@@ -1,6 +1,10 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+  modalMenu: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   modalContainer:{
     flex:1,
     justifyContent:"center",
@@ -35,11 +39,26 @@ const styles = StyleSheet.create({
     right:-10,
     backgroundColor:'transparent'
   },
-  modalMenuContentContainer:{
+  modalMenuContainer:{
     borderBottomWidth:StyleSheet.hairlineWidth,
     borderColor:"#eee",
+    backgroundColor:"white",
     alignSelf: 'stretch',
+    padding:10,
+    borderRadius:10,
+    marginBottom:10
+  },
+  modalMenuButton:{
+    backgroundColor:"white",
+    borderBottomWidth:StyleSheet.hairlineWidth,
+    borderColor:"#eee",
     padding:10
+  },
+  modalMenuButtonLast:{
+    borderBottomWidth:0
+  },
+  modalMenuButtonAlert:{
+    color:'rgb(255,59,48)'
   },
   modalMenuContent:{
     textAlign: 'center',
