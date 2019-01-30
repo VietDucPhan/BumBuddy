@@ -3,6 +3,6 @@ const Config = {
   apiPrefix:'https://bumbuddy.herokuapp.com/api/',
   androidAdRewardUnitID:'ca-app-pub-4084869608143524/8467999842',
   iosAdrewardUnitID:'ca-app-pub-4084869608143524/1729888024',
-  version:10
+  version:11
 };
 module.exports = Config;
