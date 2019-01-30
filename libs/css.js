@@ -11,6 +11,15 @@ const styles = StyleSheet.create({
     alignItems:"center",
     backgroundColor:'rgba(241,242,243,0.7)'
   },
+  modalBottomContainer:{
+    justifyContent:'flex-end'
+  },
+  bottomBoxContainer:{
+    borderRadius:10,
+    alignItems:"center",
+    justifyContent:"center",
+    marginBottom:5,
+  },
   middleBoxContainer:{
     backgroundColor:"#fff",
     padding:10,
@@ -20,6 +29,7 @@ const styles = StyleSheet.create({
     borderColor:"#eee",
     alignItems:"center",
     justifyContent:"center",
+    marginBottom:5,
     borderWidth:StyleSheet.hairlineWidth
   },
   middleBoxMenuModalContainer:{
@@ -46,13 +56,15 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     padding:10,
     borderRadius:10,
-    marginBottom:10
+    marginBottom:10,
   },
   modalMenuButton:{
     backgroundColor:"white",
     borderBottomWidth:StyleSheet.hairlineWidth,
     borderColor:"#eee",
-    padding:10
+    padding:10,
+    borderRadius:10,
+    marginTop:5
   },
   modalMenuButtonLast:{
     borderBottomWidth:0

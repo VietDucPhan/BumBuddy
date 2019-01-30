@@ -12,6 +12,7 @@ import {
  } from 'react-native';
  import Icon from 'react-native-vector-icons/Ionicons';
  import BumsLib from '../../../libs/Bums';
+ import ModalMenu from '../../../commons/modalmenu';
  import LoadingView from '../../../commons/loading';
  var BumModel = new BumsLib();
 
@@ -21,87 +22,106 @@ class morebtn extends Component {
     this.state = {
       loadingVisible:false,
       loadingName:"loading",
-      loadingAnimation:true
+      loadingAnimation:true,
+      mainModalVisibility:false,
+      secondaryModalVisibility:false,
+      mainActions:[],
+      secondaryActions:[]
     };
   }
 
   componentDidMount(){}
 
+  toggleMainModal(){
+    var self = this;
+    self.setState({
+      mainModalVisibility:!self.state.mainModalVisibility
+    });
+  }
+
+  toggleSecondaryModal(){
+    var self = this;
+    self.setState({
+      secondaryModalVisibility:!self.state.secondaryModalVisibility
+    });
+  }
+
   more(){
     var self = this;
-    var actions = [
-      {text: 'Cancel', onPress: () => console.log('Report this bum')}
-    ];
-
+    var mainActions = [];
+    var secondaryActions = [];
     switch (self.props._typeOfBtn) {
       case "comment":
-        actions.unshift({text: 'Report comment', onPress: () => {
-          if(self.props._user){
-            Alert.alert(
-                  "Report",
-                  "",
-                  [
-                    {text: 'It\'s spam', onPress: () => self._report("spam")},
-                    {text: 'It\'s inappropriate', onPress: () => self._report("inappropriate")},
-                    {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                  ],
-                  { cancelable: false }
-                )
+        if(self.props._user){
+          mainActions = [
+            {
+              name:'Report comment',
+              func: self.toggleSecondaryModal.bind(this)
+            }
+          ];
+          secondaryActions = [
+            {
+              name:'It\'s spam',
+              func:self._reportSpam.bind(this)
+            },
+            {
+              name:'It\'s inappropriate',
+              func:self._reportInappropriate.bind(this)
+            }
+          ];
+            
           } else {
             self.props.navigation.navigate("ProfileStack");
           }
-        }});
+        
         if(self.props._user && self.props._user.email && self.props._user.token && self.props._createdBy === self.props._user.email){
-          actions.unshift({text: 'Delete comment', onPress: () => self._delete()});
+          mainActions.unshift({name: 'Delete comment', func: self._delete.bind(this)});
         }
         break;
       case "bum":
-        actions.unshift({text: 'Report doublicate', onPress: () => {
-          if(self.props._user){
-            self._report("doublicate");
-          } else {
-            self.props.navigation.navigate("ProfileStack");
-          }
-        }});
+        if(self.props._user){
+          mainActions = [{
+            name: 'Report doublicate',
+            func: self._reportDoublicate.bind(this)
+          }];
+          
+        } else {
+          self.props.navigation.navigate("ProfileStack");
+        }
         break;
       case "reply":
-        actions.unshift({text: 'Report reply', onPress: () => {
-          if(self.props._user){
-            Alert.alert(
-                  "Report",
-                  "",
-                  [
-                    {text: 'It\'s spam', onPress: () => self._report("spam")},
-                    {text: 'It\'s inappropriate', onPress: () => self._report("inappropriate")},
-                    {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                  ],
-                  { cancelable: false }
-                )
-          } else {
-            self.props.navigation.navigate("ProfileStack");
-          }
-        }});
+        if(self.props._user){
+          mainActions = [
+            {
+              name:'Report comment',
+              func: self.toggleSecondaryModal.bind(this)
+            }
+          ];
+          secondaryActions = [
+            {
+              name:'It\'s spam',
+              func:self._reportSpam.bind(this)
+            },
+            {
+              name:'It\'s inappropriate',
+              func:self._reportInappropriate.bind(this)
+            }
+          ];
+        } else {
+          self.props.navigation.navigate("ProfileStack");
+        }
         if(self.props._user && self.props._user.email && self.props._user.token && self.props._createdBy === self.props._user.email){
-          actions.unshift({text: 'Delete reply', onPress: () => self._delete()});
+          mainActions.unshift({name: 'Delete reply', func:self._delete.bind(this)});
         }
         break;
     }
-    if(self.props._id){
-      Alert.alert(
-        '',
-        'Please choose option below',
-        actions,
-        { cancelable: true }
-      );
-    } else {
-      Alert.alert(
-        'Error',
-        'There was an error, Please try again later',
-        [{text: 'Cancle', onPress: () => console.log('Report this bum')}],
-        { cancelable: true }
-      );
+    self.setState({
+      mainActions: mainActions,
+      secondaryActions: secondaryActions
+    });
+    if(self.props._user){
+      self.toggleMainModal();
     }
-
   }
 
   _delete(){
@@ -135,6 +155,21 @@ class morebtn extends Component {
     } else {
       self.props.navigation.navigate("ProfileStack");
     }
+  }
+
+  _reportDoublicate(){
+    var self = this;
+    self._report('doublicate');
+  }
+
+  _reportSpam(){
+    var self = this;
+    self._report('spam');
+  }
+
+  _reportInappropriate(){
+    var self = this;
+    self._report('inappropriate');
   }
 
   _report(description){
@@ -178,6 +213,16 @@ class morebtn extends Component {
     var self = this;
     return(
       <View>
+        <ModalMenu
+          toggleModal={self.toggleMainModal.bind(this)}
+          visible={self.state.mainModalVisibility}
+          menus={self.state.mainActions}
+        />
+        <ModalMenu
+          toggleModal={self.toggleSecondaryModal.bind(this)}
+          visible={self.state.secondaryModalVisibility}
+          menus={self.state.secondaryActions}
+        />
         <TouchableOpacity onPress={()=>{self.more()}}>
           <Icon style={{padding:5}} size={20} name="ios-more" />
         </TouchableOpacity>

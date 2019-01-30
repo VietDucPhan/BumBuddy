@@ -188,7 +188,7 @@ class Rating extends Component {
               <Morebtn navigation={self.props.navigation} _id={self.props._id} _typeOfBtn="bum" _user={self.props._user} />
             </View>
             <View style={styles.overallRating}>
-              <Text style={styles.overallRatingText}>Overall:</Text>
+              <Text style={styles.overallRatingText}>General Hygiene:</Text>
               <View style={styles.starRating}>
                 {starRating.map(function(obj, i){
 
