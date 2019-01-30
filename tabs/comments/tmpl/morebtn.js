@@ -224,7 +224,7 @@ class morebtn extends Component {
           menus={self.state.secondaryActions}
         />
         <TouchableOpacity onPress={()=>{self.more()}}>
-          <Icon style={{padding:5}} size={20} name="ios-more" />
+          <Icon style={{padding:10}} size={20} name="ios-more" />
         </TouchableOpacity>
         <LoadingView close={self._closeBtn.bind(this)} name={self.state.loadingName} visible={self.state.loadingVisible} loadingAnimation={self.state.loadingAnimation} />
       </View>

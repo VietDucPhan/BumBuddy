@@ -16,8 +16,11 @@ import {
   RefreshControl,
   FlatList,
   SectionList,
-  Button
+  Button,
+  Modal,
+  TouchableWithoutFeedback
 } from 'react-native';
+const {width, height} = Dimensions.get('window');
 import PhotoView from 'react-native-photo-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AuthLib from '../../libs/Auth';
@@ -46,7 +49,9 @@ class comments extends Component {
       limit:LIMIT,
       infiniteLoading:true,
       bottomRefreshing:false,
-      bottomLoadingTextIndicator:"Loading..."
+      bottomLoadingTextIndicator:"Loading...",
+      zoomImageVisibility:false,
+      zoomImageUri:null
     };
   }
 
@@ -278,6 +283,56 @@ class comments extends Component {
     } else {
       return(
         <View>
+          <Modal
+            animationType="fade"
+            transparent={false}
+            visible={self.state.zoomImageVisibility}
+          > 
+            <View style={
+              {
+                flex:1,
+                justifyContent:"center",
+                alignItems:"center",
+                backgroundColor:'black'
+              }
+            }>
+              
+              {
+                self.state.zoomImageUri
+                ?
+                <PhotoView 
+                  minimumZoomScale={1}
+                  maximumZoomScale={3}
+                  androidScaleType="center"
+                  loadingIndicatorSource={()=>{
+                    return(
+                      <ActivityIndicator animating={true}></ActivityIndicator>
+                    );
+                  }}
+                  onLoad={() => console.log("Image loaded!")}
+                  style={{width: width, height: height}} 
+                  source={{uri: self.state.zoomImageUri}}/>
+                :
+                <Text>Could not load image</Text>
+              }
+                <View style={{
+                    position:'absolute',
+                    top:15,
+                    right:5,
+                    zIndex:9999,
+                    width:50,
+                    height:50
+                  }}>
+                  <TouchableOpacity onPress={()=>{
+                    self.setState({
+                      zoomImageVisibility:false
+                    });
+                  }}>
+                    <Icon color="#FFF" style={{padding:10,fontWeight:'bold'}} size={35} name={'ios-close'} />
+                  </TouchableOpacity>
+                </View>
+            </View>
+          </Modal>
           <SectionList
           sections={[{data:self.state.comments}]}
           //style={styles.sectionContainer}
@@ -372,10 +427,21 @@ class comments extends Component {
                       </View>
                       <View>
                         {obj.media && obj.media[0] &&
-                          <Image 
-                            resizeMode="contain" 
-                            source={{uri: obj.media[0].secure_url}}
-                            style={self._calculateImageHeight(obj.media[0].width,Dimensions.get('window').width,obj.media[0].height)} />}
+                          <TouchableWithoutFeedback onPress={()=>{
+                            console.log(obj.media[0]);
+                            if(obj.media[0].format == 'jpg' || obj.media[0].format == 'png' || obj.media[0].format == 'jpeg'){
+                              self.setState({
+                              zoomImageVisibility:true,
+                                zoomImageUri:obj.media[0].secure_url
+                              });
+                            }
+                          }}>
+                            <Image 
+                              resizeMode="contain" 
+                              source={{uri: obj.media[0].secure_url}}
+                              style={self._calculateImageHeight(obj.media[0].width,Dimensions.get('window').width,obj.media[0].height)} />
+                          </TouchableWithoutFeedback>
+                        }
 
                       </View>
                       <View style={Css.commentorCommentContainer}>
