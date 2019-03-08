@@ -65,22 +65,25 @@ class Upload {
     var self = this;
     var uriArr = mediaData.uri.split("/");
     var lastIndex = uriArr.length - 1;
-
+    var fetchBlobWrap = '';
     if(Platform.OS === "ios"){
-      mediaData.uri = mediaData.uri.replace("file://","");
+      fetchBlobWrap = mediaData.uri.replace("file://","");
+    } else {
+      fetchBlobWrap = mediaData.path;
     }
+
     try {
-      RNFetchBlob.fetch('POST', 'https://api.cloudinary.com/v1_1/dsthiwwp4/video/upload',
+      RNFetchBlob.fetch('POST', 'https://api.cloudinary.com/v1_1/dsthiwwp4/video/upload/',
       {
         'Content-Type': 'multipart/form-data',
       },
       [
-        {name: 'file', filename: uriArr[lastIndex], data: RNFetchBlob.wrap(mediaData.uri)},
+        {name: 'file', filename: uriArr[lastIndex], data: RNFetchBlob.wrap(fetchBlobWrap)},
         {name: 'upload_preset', data: 'noryv4a6'}
       ]).then((response) => response.json())
         .then((responseJson) => {
           console.log(responseJson);
-          responseJson.secure_url = "https://res.cloudinary.com/dsthiwwp4/video/upload/so_0,eo_3/e_loop/" + responseJson.public_id + ".gif";
+          responseJson.secure_url = "https://res.cloudinary.com/dsthiwwp4/video/upload/so_0,eo_3,w_360,h_480,c_fill/e_loop/" + responseJson.public_id + ".gif";
           return callback(responseJson);
         }).catch((err) => {
         console.log(err);

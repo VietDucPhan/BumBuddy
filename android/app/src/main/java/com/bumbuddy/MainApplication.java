@@ -18,6 +18,7 @@ import com.imagepicker.ImagePickerPackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
+import com.shahenlibrary.RNVideoProcessingPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,7 +46,8 @@ public class MainApplication extends Application implements ReactApplication {
               new ImagePickerPackage(),
               new RNFirebaseMessagingPackage(),
               new RNFirebaseAdMobPackage(),
-              new RNFirebaseNotificationsPackage()
+              new RNFirebaseNotificationsPackage(),
+              new RNVideoProcessingPackage()
       );
     }
 

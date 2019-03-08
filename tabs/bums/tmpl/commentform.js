@@ -21,6 +21,7 @@ import {
   ActivityIndicator
  } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { VideoPlayer, ProcessingManager } from 'react-native-video-processing';
 var ImagePicker = require('react-native-image-picker');
 import BumsLib from '../../../libs/Bums';
 import UploadLib from '../../../libs/Upload';
@@ -49,7 +50,8 @@ class CommentForm extends Component {
       showActivitiIndicator:false,
       activityIndicatorName:'loading',
       showModalMenu:false,
-      videoSource:null
+      videoSource:null,
+      choseFromLibrary:false
     }
     //this.toggleCameraMenu.bind(this);
   }
@@ -150,7 +152,48 @@ class CommentForm extends Component {
               //self.props.navigation.navigate('BumDetail',{_id:result.data._id});
             }
           });
-        } else if (videoSource) {
+        } else if (videoSource && self.state.choseFromLibrary) {
+          console.log('upload video to cloud');
+          UploadModel.videoUploadToCloud(videoSource,function(response){
+            console.log(response);
+            if(response && response.errors){
+              self.setState({
+                showActivitiIndicator:false
+              });
+              Alert.alert(
+                result.errors[0].title,
+                result.errors[0].detail,
+                [
+                  {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                ],
+                { cancelable: false }
+              )
+            } else {
+              commentData.media.push(response);
+              //alert("finished upload image");
+              BumsModel.addComment(commentData,function(result){
+                self.setState({
+                    showActivitiIndicator:false
+                  });
+                if(result && result.errors){
+                  Alert.alert(
+                    result.errors[0].title,
+                    result.errors[0].detail,
+                    [
+                      {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                    ],
+                    { cancelable: false }
+                  )
+                } else {
+                  
+                  self.props.navigation.state.params.update();
+                  self.props.navigation.goBack();
+                }
+              })
+              self.props.navigation.navigate('BumDetail',{_id:result.data._id});
+            }
+          });
+        } else if (videoSource && !self.state.choseFromLibrary) {
           UploadModel.videoUploadToCloud(self.state.videoSource,function(response){
             console.log(response);
             if(response && response.errors){
@@ -248,7 +291,8 @@ class CommentForm extends Component {
         console.log('ImagePicker Error: ', response.error);
       } else {
         self.setState({
-          videoSource:response
+          videoSource:response,
+          choseFromLibrary:false
         });
       }
     });
@@ -272,7 +316,8 @@ class CommentForm extends Component {
       else {
         let source = { uri: 'data:image/jpeg;base64,' + response.data };
         self.setState({
-          imageSource:source
+          imageSource:source,
+          choseFromLibrary:false
         });
       }
     });
@@ -292,7 +337,8 @@ class CommentForm extends Component {
       else {
         let source = { uri: 'data:image/jpeg;base64,' + response.data };
         self.setState({
-          imageSource:source
+          imageSource:source,
+          choseFromLibrary:false
         });
       }
     });
@@ -311,10 +357,48 @@ class CommentForm extends Component {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        self.setState({
-          videoSource:response
-        });
+        console.log('response',response);
+        let responsePath = response.path ? response.path : response.origURL;
+          if(Platform.OS !== "ios"){
+            ProcessingManager.getVideoInfo(responsePath).then(({ duration, size, frameRate, bitrate }) => {
+              if(duration > 3){
+                let trimOptions = {
+                  startTime: 0,
+                  endTime: 3
+                };
+                ProcessingManager.trim(response.path, trimOptions) // like VideoPlayer trim options
+                  .then((data) => {
+                    response.path = data;
+                    self.setState({
+                      videoSource:response,
+                      choseFromLibrary:true
+                    });
+                    // ProcessingManager.compress(data, compressOptions) // like VideoPlayer compress options
+                    // .then((data) => {
+                    //   console.log('compress data',data);
+                    // }).catch(e=>console.log(e));
+                  });
+              } else {
+                self.setState({
+                  videoSource:response,
+                  choseFromLibrary:true
+                });
+              }
+            });
+          } else {
+            self.setState({
+              videoSource:response,
+              choseFromLibrary:true
+            });
+          }
       }
+    });
+  }
+
+  setTrimmedVideoSource(source){
+    self.setState({
+      videoSource:source,
+      choseFromLibrary:true
     });
   }
 
@@ -382,13 +466,13 @@ class CommentForm extends Component {
               func:self.launchVideoCamera.bind(this)
             },
             {
-              name:'Choose from library',
+              name:'Choose from image library',
               func:self.launchImageLibrary.bind(this)
+            },
+            {
+              name:'Choose from video library',
+              func:self.launchVideoLibrary.bind(this)
             }
-            // {
-            //   name:'Choose from video library',
-            //   func:self.launchVideoLibrary.bind(this)
-            // }
             ]}/>
         <View style={Css.textInputContainer}>
           <TextInput
